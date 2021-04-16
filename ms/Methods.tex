@@ -7,7 +7,7 @@
 If one is interested to reproduce the workflow presented here, a good starting point would be to download the following GitHub repository:
 
 \begin{verbatim}
-git clone soda460
+git clone https://github.com/soda460/RNAseq_GATK_JGW.git
 \end{verbatim}
 
 It contains all scripts described in this section as well as several text files that allow to easily reproduce the analysis presented here. Note that some scripts use relative paths. Therefore using the files/folder organization presentend in figure 2 will help to reproduce the results presented here with minimal changes.
@@ -26,9 +26,9 @@ contained will also make the whole process easier.
 
 \subsection{Downloading the MAP dataset from Sequence Read Archive}
 
-We will use the complete RNA-seq raw sequences from Ariel et al. \cite{Ariel2021}. However, rather than using the 72 samples presented in the article, we will focus on 24 representative samples of this study:
+We will use the complete RNA-seq raw sequences from \citep{Ariel2021}. However, rather than using the 72 samples presented in the article, we will focus on 24 representative samples of this study:
 
-The \textbf{samples.list} file located in the /data directory contains the SRA identifiers of these 24 samples:
+The \textbf{SRA.list} file contains the SRA identifiers of these 24 samples:
 \begin{verbatim}
 SRS2153774
 SRS2153779
@@ -58,44 +58,41 @@ SRS2153845
 
 
 
-Simply download the 24 samples with :
+Navigate to the /data directory and download the 24 samples with the the following command from the SRAtoolkit:
 
 \begin{verbatim}
-prefetch --option-file samples.list
+prefetch --option-file SRA.list
 \end{verbatim}
 
-To extract fq files from SRA files, the fasterq-dump command is required:
+To extract fastq files from .sra files, the fasterq-dump command is required. For example, the following command will produce SRR5487396\_R1.fastq.gz and SRR5487396\_R2.fastq.gz files from the SRR5487396.sra archive.
 
 \begin{verbatim}
-fasterq-dump --split-files SRR5487396.sra
+fasterq-dump --split-files SRR5487396/SRR5487396.sra
 \end{verbatim}
 
-In practice, you will want to do it for all folders. Navigate to the /data folder and use the following qsub command to lauch the faster-qdump commands sequentially:
+In practice, you will want to extract all downloaded sequence read archives, which are nested in distinct folders. Navigate to the /data folder and use the following qsub command to lauch the faster-qdump commands sequentially:
 
 \begin{verbatim}
 qsub faster-qdump.sh
 \end{verbatim}
 
-where \textbf{faster-qdump.sh} is a simple bash script :
+where \textbf{faster-qdump.sh} is a bash script containing instructions for the SGE workload manager and the code to iterate on all downloaded sequence read archives and produce the forward and reverse fastq files:
+
 \begin{verbatim}
-	#! /bin/bash
-	#$ -S /bin/bash
-	#$ -cwd
-	#$ -N 'fasterq-dump'
-	#$ -pe smp 12
-	#$ -o ./qsub_log.txt
-	#$ -e ./qsub_err.txt
+#! /bin/bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -N 'fasterq-dump'
+#$ -pe smp 12
+#$ -o ./qsub_log.txt
+#$ -e ./qsub_err.txt
 	
-	for i in `ls -d SRR*`; do
+for i in `ls -d SRR*`; do
 	cd $i
 	fasterq-dump --split-files $i.sra
 	cd ..
-	done
+done
 \end{verbatim}
-
-
-
-
 
 
 %figure file organization

@@ -17,7 +17,7 @@ cohort_2.sample.map<BR ALIGN="LEFT"/>>
 "/data" [shape=folder,
 		label=<<B>/data</B><BR/>
 fasterq-dump.sh<BR ALIGN="LEFT"/>
-samples.list<BR ALIGN="LEFT"/>
+SRA.list<BR ALIGN="LEFT"/>
 star_aligner_batch.sh<BR ALIGN="LEFT"/>
 star_aligner_batch_2nd_pass.sh<BR ALIGN="LEFT"/>
 UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
@@ -27,8 +27,8 @@ line 3<BR ALIGN="LEFT"/>>
 
 "/SRR5487372" [shape=folder,
 				   	label=<<B>/SRR5487372</B><BR/>
-fastq.gz **
-SRR5487372.sra<BR ALIGN="LEFT"/>>
+SRR5487372.sra<BR ALIGN="LEFT"/>
+SRR5487372.fastq.gz<BR ALIGN="LEFT"/>>
 				   ];
 
 "outputSRR5487372" [shape=folder,
