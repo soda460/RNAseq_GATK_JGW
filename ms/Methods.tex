@@ -95,35 +95,45 @@ done
 \end{verbatim}
 
 
-%figure file organization
+
+However, execute the latter script would take a lot of times. To take advantage of the capacity of the cluster, one should may consider launching array tasks (task in parallel). To learn more about this, one can visit this page (SGE).
+
+Before using the faster-qdump\_parallel.sh, we need to create a simple list file of the 24 SRR* folders present in the /data folder:
 
 \begin{verbatim}
-sample,cowID,SRAID,Run,RGPU
-A_CTL24,cowA,SRS2153774,SRR5487372,C5NL3ACXX.1.CAGATC
-A_MAP24,cowA,SRS2153779,SRR5487376,C5NL3ACXX.1.TGACCA
-B_CTL24,cowB,SRS2153781,SRR5487378,C5NL3ACXX.3.TGACCA
-B_MAP24,cowB,SRS2153786,SRR5487382,C5NL3ACXX.3.GTGAAA
-C_CTL24,cowC,SRS2153787,SRR5487384,C5K8FACXX.3.AGTCAA
-C_MAP24,cowC,SRS2153791,SRR5487388,C5K8FACXX.3.GTCCGC
-D_CTL24,cowD,SRS2153793,SRR5487390,C5K8FACXX.1.TGACCA
-D_MAP24,cowD,SRS2153797,SRR5487394,C5K8FACXX.1.GTGAAA
-E_CTL24,cowE,SRS2153799,SRR5487396,C547FACXX.1.AGTCAA
-E_MAP24,cowE,SRS2153803,SRR5487400,C547FACXX.1.GTCCGC
-F_CTL24,cowF,SRS2153805,SRR5487402,C547FACXX.3.TGACCA
-F_MAP24,cowF,SRS2153809,SRR5487406,C547FACXX.3.GTGAAA
-G_CTL24,cowG,SRS2153811,SRR5487408,C5NL3ACXX.5.AGTCAA
-G_MAP24,cowG,SRS2153815,SRR5487412,C5NL3ACXX.5.GTCCGC
-H_CTL24,cowH,SRS2153817,SRR5487414,C5NL3ACXX.7.TGACCA
-H_MAP24,cowH,SRS2153821,SRR5487418,C5NL3ACXX.7.CTTGTA
-I_CTL24,cowI,SRS2153823,SRR5487420,C5K8FACXX.5.AGTTCC
-I_MAP24,cowI,SRS2153827,SRR5487424,C5K8FACXX.5.GTGAAA
-J_CTL24,cowJ,SRS2153829,SRR5487426,C5K8FACXX.7.TGACCA
-J_MAP24,cowJ,SRS2153833,SRR5487430,C5K8FACXX.7.GTGAAA
-K_CTL24,cowK,SRS2153835,SRR5487432,C547FACXX.5.AGTCAA
-K_MAP24,cowK,SRS2153839,SRR5487436,C547FACXX.5.GTCCGC
-L_CTL24,cowL,SRS2153841,SRR5487438,C547FACXX.7.AGTCAA
-L_MAP24,cowL,SRS2153845,SRR5487442,C547FACXX.7.GTCCGC
+ls -d1 SRR5487*>SRR.list
 \end{verbatim}
+
+Be sure that the SRR.list file contains the 24 SRR identifiers (without the .sra extension) on separates lines before lauching the paralle version of fasterq.dump.sh which look like:
+
+\begin{verbatim}
+#!/bin/bash
+#$ -V
+#$ -N fasterq-dump
+#$ -S /bin/bash
+#$ -cwd
+#$ -j y
+#$ -b n
+#$ -e ./qsub_err.txt
+#$ -o ./qsub_log.txt
+#$ -q all.q
+#$ -t 1-24
+#$ -pe smp 4
+
+input=$(head -n $SGE_TASK_ID SRR.list | tail -n 1)
+
+fasterq-dump --split-files $input/$input.sra
+\end{verbatim}
+
+
+Figure x show how a computationnaly intense task, namely the decompressing of an .sra archive, can be run at the same time with different input files. This can be done by using the SGE task array capabilities. Technically, the same script is run multiple times, with different values taken by the single environment variable \$SGE\_TASK\_ID. Since many bioinformatic tasks used in this tutorial are computationally intensive, most of the scripts presented thereafter will be base on this model.
+
+
+
+
+%figure file organization
+
+
 
  
 
@@ -320,14 +330,44 @@ Before running any GATK workflow, one will need to add Read groups. This step en
 
 Here, we will set the flowcells, sequencing lanes and sample barcode in the platform unit (PU) tag.
 
-Before running the main script, we will extract some important columns from our metadata file and place them in separate files that will be used to populate important fields of the read groups.
+Before running the main script, we will extract some important columns from our metadata file and place them in separate files that will be used to populate important fields of the read groups. Here our metadata .csv file:
 
 \begin{verbatim}
+sample,cowID,SRAID,Run,RGPU
+A_CTL24,cowA,SRS2153774,SRR5487372,C5NL3ACXX.1.CAGATC
+A_MAP24,cowA,SRS2153779,SRR5487376,C5NL3ACXX.1.TGACCA
+B_CTL24,cowB,SRS2153781,SRR5487378,C5NL3ACXX.3.TGACCA
+B_MAP24,cowB,SRS2153786,SRR5487382,C5NL3ACXX.3.GTGAAA
+C_CTL24,cowC,SRS2153787,SRR5487384,C5K8FACXX.3.AGTCAA
+C_MAP24,cowC,SRS2153791,SRR5487388,C5K8FACXX.3.GTCCGC
+D_CTL24,cowD,SRS2153793,SRR5487390,C5K8FACXX.1.TGACCA
+D_MAP24,cowD,SRS2153797,SRR5487394,C5K8FACXX.1.GTGAAA
+E_CTL24,cowE,SRS2153799,SRR5487396,C547FACXX.1.AGTCAA
+E_MAP24,cowE,SRS2153803,SRR5487400,C547FACXX.1.GTCCGC
+F_CTL24,cowF,SRS2153805,SRR5487402,C547FACXX.3.TGACCA
+F_MAP24,cowF,SRS2153809,SRR5487406,C547FACXX.3.GTGAAA
+G_CTL24,cowG,SRS2153811,SRR5487408,C5NL3ACXX.5.AGTCAA
+G_MAP24,cowG,SRS2153815,SRR5487412,C5NL3ACXX.5.GTCCGC
+H_CTL24,cowH,SRS2153817,SRR5487414,C5NL3ACXX.7.TGACCA
+H_MAP24,cowH,SRS2153821,SRR5487418,C5NL3ACXX.7.CTTGTA
+I_CTL24,cowI,SRS2153823,SRR5487420,C5K8FACXX.5.AGTTCC
+I_MAP24,cowI,SRS2153827,SRR5487424,C5K8FACXX.5.GTGAAA
+J_CTL24,cowJ,SRS2153829,SRR5487426,C5K8FACXX.7.TGACCA
+J_MAP24,cowJ,SRS2153833,SRR5487430,C5K8FACXX.7.GTGAAA
+K_CTL24,cowK,SRS2153835,SRR5487432,C547FACXX.5.AGTCAA
+K_MAP24,cowK,SRS2153839,SRR5487436,C547FACXX.5.GTCCGC
+L_CTL24,cowL,SRS2153841,SRR5487438,C547FACXX.7.AGTCAA
+L_MAP24,cowL,SRS2153845,SRR5487442,C547FACXX.7.GTCCGC
+\end{verbatim}
+
+ 
+The RGLB.txt file will hold the library name. In this case, we will use the sample name
+\begin{verbatim}
 # Corresponding to the sample name
-cut -f 1 -d ',' ../../metadata/metadata.txt > RGLB.txt
+cut -f 1 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGLB.txt
  
 # Corresponding to the PU tag FLOW CELL 
-cut -f 5 -d ',' ../../metadata/metadata.txt > RGPU.txt
+cut -f 5 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGPU.txt
 \end{verbatim}
 
 

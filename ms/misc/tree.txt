@@ -22,13 +22,13 @@ star_aligner_batch.sh<BR ALIGN="LEFT"/>
 star_aligner_batch_2nd_pass.sh<BR ALIGN="LEFT"/>
 UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
 UMD3.1_chromosomes_e.fa<BR ALIGN="LEFT"/>
-line 3<BR ALIGN="LEFT"/>>
+SRR5487372_1.fastq<BR ALIGN="LEFT"/>
+SRR5487372_2.fastq<BR ALIGN="LEFT"/>>
 				   ];
 
 "/SRR5487372" [shape=folder,
 				   	label=<<B>/SRR5487372</B><BR/>
-SRR5487372.sra<BR ALIGN="LEFT"/>
-SRR5487372.fastq.gz<BR ALIGN="LEFT"/>>
+SRR5487372.sra<BR ALIGN="LEFT"/>>
 				   ];
 
 "outputSRR5487372" [shape=folder,
