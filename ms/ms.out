@@ -1,0 +1,30 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Materials}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Environment}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Installing bioinformatic programs}{section.2}% 4
+\BOOKMARK [3][-]{subsubsection.2.2.1}{The GATK suite}{subsection.2.2}% 5
+\BOOKMARK [3][-]{subsubsection.2.2.2}{The SRA toolkit programs}{subsection.2.2}% 6
+\BOOKMARK [3][-]{subsubsection.2.2.3}{The STAR aligner}{subsection.2.2}% 7
+\BOOKMARK [3][-]{subsubsection.2.2.4}{The Picard tools}{subsection.2.2}% 8
+\BOOKMARK [3][-]{subsubsection.2.2.5}{Samtools, BCFtools and HTSlib}{subsection.2.2}% 9
+\BOOKMARK [1][-]{section.3}{Methods}{}% 10
+\BOOKMARK [2][-]{subsection.3.1}{Downloading scripts used in this tutorial}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.2}{Downloading the MAP dataset from Sequence Read Archive}{section.3}% 12
+\BOOKMARK [2][-]{subsection.3.3}{Prepare a metadata file and a file organization}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.4}{Performing STAR alignment}{section.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.4.1}{Generating genome indexes files}{subsection.3.4}% 15
+\BOOKMARK [3][-]{subsubsection.3.4.2}{Aligment with the STAR aligner}{subsection.3.4}% 16
+\BOOKMARK [3][-]{subsubsection.3.4.3}{Adding Splice junctions \(2nd mapping pass\)}{subsection.3.4}% 17
+\BOOKMARK [3][-]{subsubsection.3.4.4}{Sorting and indexing alignment files}{subsection.3.4}% 18
+\BOOKMARK [2][-]{subsection.3.5}{Add Read groups}{section.3}% 19
+\BOOKMARK [2][-]{subsection.3.6}{MarkDuplicates}{section.3}% 20
+\BOOKMARK [3][-]{subsubsection.3.6.1}{The gff3 file}{subsection.3.6}% 21
+\BOOKMARK [2][-]{subsection.3.7}{SplitNCigarReads}{section.3}% 22
+\BOOKMARK [2][-]{subsection.3.8}{Base Quality Recalibration}{section.3}% 23
+\BOOKMARK [3][-]{subsubsection.3.8.1}{BaseRecalibrator first step}{subsection.3.8}% 24
+\BOOKMARK [3][-]{subsubsection.3.8.2}{BaseRecalibrator second step}{subsection.3.8}% 25
+\BOOKMARK [2][-]{subsection.3.9}{Variant Calling}{section.3}% 26
+\BOOKMARK [3][-]{subsubsection.3.9.1}{GVCF part}{subsection.3.9}% 27
+\BOOKMARK [3][-]{subsubsection.3.9.2}{Import DBI }{subsection.3.9}% 28
+\BOOKMARK [3][-]{subsubsection.3.9.3}{Genotype GVCF}{subsection.3.9}% 29
+\BOOKMARK [2][-]{subsection.3.10}{Examine and visualize alignment files}{section.3}% 30

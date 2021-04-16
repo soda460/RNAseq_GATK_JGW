@@ -1,0 +1,50 @@
+\documentclass[]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\setlength{\parindent}{0pt} %to avoid the first line indent throughout the documen
+
+\title{Variant calling from RNA-seq data using the GATK joint genotyping workflow}
+\author{Jean-Simon Brouard}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Put the abstract here.
+\end{abstract}
+
+\section{Introduction}
+Since the introduction of RNAseq, many researchers have seen the opportunity to use this data not only for differential expression analysis, but also for calling variants \cite{Piskol2013}. Examples of such researches include a, b, c and d. Whereas trusted bioinformatic protocols exist for detecting sequence variants on a variety of DNAseq samples (germline DNA, whole-exome sequencing etc.) that come from distinct contexts \cite{Koboldt2020}, environnemental samples), protocols designed to handle RNAseq data are scarce \cite{Piskol2013}. At present the gold-standard for variant calling on RNAseq data is the GATK Per-sample workflow although an updated detailed workflow documentation for calling variants in RNAseq data is in the roadmap of the GATK experts \cite{GATK_best_RNAseq}.
+
+Here we present an end-to-end analysis of...
+
+
+The key idea is to combine two workflows that origin from the the GATK team
+
+Figure 1 present the workflow proposed here.
+
+% figure 1 
+
+
+
+
+
+In the next section, we describe how the diverse programs required to perform the whole analysis can be installed.
+
+\include{Materials}
+
+\include{Methods}
+
+\bibliographystyle{unsrtnat}
+\bibliography{bibliography/RNAseq_VC}
+
+
+
+
+
+\end{document}

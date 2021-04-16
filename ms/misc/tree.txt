@@ -1,0 +1,160 @@
+graph {
+size="18,18";
+rankdir=LR;
+"/metadata" [shape=folder,
+				   	label=<<B>/metadata</B><BR/>
+samples.list<BR ALIGN="LEFT"/>
+cohort_1.sample.map<BR ALIGN="LEFT"/>
+cohort_2.sample.map<BR ALIGN="LEFT"/>>
+				   ];
+
+"/" [shape=folder,label=<<B>/</B><BR/>>];
+
+"/analysis" [shape=folder,
+				   	label=<<B>/analysis</B><BR/>>
+				   ];
+
+"/data" [shape=folder,
+		label=<<B>/data</B><BR/>
+fasterq-dump.sh<BR ALIGN="LEFT"/>
+samples.list<BR ALIGN="LEFT"/>
+star_aligner_batch.sh<BR ALIGN="LEFT"/>
+star_aligner_batch_2nd_pass.sh<BR ALIGN="LEFT"/>
+UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
+UMD3.1_chromosomes_e.fa<BR ALIGN="LEFT"/>
+line 3<BR ALIGN="LEFT"/>>
+				   ];
+
+"/SRR5487372" [shape=folder,
+				   	label=<<B>/SRR5487372</B><BR/>
+fastq.gz **
+SRR5487372.sra<BR ALIGN="LEFT"/>>
+				   ];
+
+"outputSRR5487372" [shape=folder,
+				   	label=<<B>/SRR5487372</B><BR/>>
+				   ];
+
+
+
+
+
+"/STAR" [shape=folder,
+		label=<<B>/STAR</B><BR/>
+star_genome_index_builder.sh<BR ALIGN="LEFT"/>
+Bos_taurus.UMD3.1.87.gtf<BR ALIGN="LEFT"/>
+Bos_taurus.UMD3.1.dna.toplevel.fa<BR ALIGN="LEFT"/>
+Bos_taurus.UMD3.1.87_index<BR ALIGN="LEFT"/>>
+];
+
+"/addReadGroups" [shape=folder,
+				 label=<<B>/addReadGroups</B><BR/>
+addOrReplaceReadsGroups.sh<BR ALIGN="LEFT"/>>
+				   ];
+
+"/BaseQualityRecalibration" [shape=folder,
+							label=<<B>/BaseQualityRecalibration</B><BR/>
+BaseRecalibrator_first_step.sh<BR ALIGN="LEFT"/>
+ApplyBQSR_second_step.sh<BR ALIGN="LEFT"/>
+AnalyzeCovariates.sh<BR ALIGN="LEFT"/>
+refGenome.dict<BR ALIGN="LEFT"/>
+refGenome.fasta<BR ALIGN="LEFT"/>
+refGenome.fasta.fai<BR ALIGN="LEFT"/>
+known_sites.vcf<BR ALIGN="LEFT"/>
+known_sites.vcf.idx<BR ALIGN="LEFT"/>>
+				   ];
+
+"/SplitNCigarReads" [shape=folder,
+				   	label=<<B>/SplitNCigarReads</B><BR/>
+SplitNCigarReads.sh<BR ALIGN="LEFT"/>>
+				   ];
+
+
+"/GenomicsDBImport" [shape=folder,
+				   	label=<<B>/GenomicsDBImport</B><BR/>
+GenomicsDBImport.sh<BR ALIGN="LEFT"/>
+GenotypeGVCF.sh<BR ALIGN="LEFT"/>
+refGenome.dict<BR ALIGN="LEFT"/>
+refGenome.fasta<BR ALIGN="LEFT"/>
+refGenome.fasta.fai<BR ALIGN="LEFT"/>
+output.vcf.gz<BR ALIGN="LEFT"/>
+output.vcf.gz.tbi<BR ALIGN="LEFT"/>>
+				   ];
+
+
+"/MarkDuplicates" [shape=folder,
+				  label=<<B>/MarkDuplicates</B><BR/>line 2<BR ALIGN="LEFT"/>
+line 3<BR ALIGN="LEFT"/>
+line 3<BR ALIGN="LEFT"/>>
+				   ];
+
+
+
+
+
+
+
+
+
+				   
+				   
+"/GVCF" [shape=folder,
+		label=<<B>/GVCF</B><BR/>
+singleSampleGVCFcalling.sh<BR ALIGN="LEFT"/>
+refGenome.dict<BR ALIGN="LEFT"/>
+refGenome.fasta<BR ALIGN="LEFT"/>
+refGenome.fasta.fai<BR ALIGN="LEFT"/>>
+				   ];	   
+				   
+
+ 
+				   
+"/output" [shape=folder,
+		  label=<<B>/output</B><BR/>
+bam.list<BR ALIGN="LEFT"/>
+samtools_batch_index.sh<BR ALIGN="LEFT"/>
+SRR5487372Aligned.sortedByCoord.out.bam<BR ALIGN="LEFT"/>
+SRR5487372Aligned.sortedByCoord.out.bam.bai<BR ALIGN="LEFT"/>
+SRR5487372Log.final.out<BR ALIGN="LEFT"/>
+SRR5487372Log.out<BR ALIGN="LEFT"/>
+SRR5487372Log.progress.out<BR ALIGN="LEFT"/>
+SRR5487372SJ.out.tab<BR ALIGN="LEFT"/>>
+				   ];	
+				   
+"/output_2nd_pass" [shape=folder,
+		  label=<<B>/output_2nd_pass</B><BR/>
+samtools_sort_bam.sh<BR ALIGN="LEFT"/>>
+				   ];
+				   
+"/gatk_tmp" [shape=folder,
+		  label=<<B>/gatk_tmp</B><BR/>>
+			];
+				   
+"/my_database" [shape=folder,
+		    label=<<B>/my_database</B><BR/>>
+			];	   		   
+
+
+"/" -- "/data";
+"/" -- "/analysis";
+"/" -- "/metadata";
+
+"/data" -- "/SRR5487372"
+
+"/analysis" -- "/GenomicsDBImport";	
+"/analysis" -- "/MarkDuplicates";	
+"/analysis" -- "/addReadGroups";	
+"/analysis" -- "/SplitNCigarReads";	
+"/analysis" -- "/GenomicsDBImport";	
+"/analysis" -- "/STAR";
+"/analysis" -- "/GVCF";
+"/analysis" -- "/BaseQualityRecalibration";
+"/STAR" -- "/output"
+"/STAR" -- "/output_2nd_pass"
+"/output" -- "outputSRR5487372"
+
+
+"/SplitNCigarReads" -- "/gatk_tmp";
+
+"/GenomicsDBImport" -- "/my_database";
+}

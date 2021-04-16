@@ -1,0 +1,36 @@
+\begin{thebibliography}{4}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Piskol et~al.(2013)Piskol, Ramaswami, and Li]{Piskol2013}
+Robert Piskol, Gokul Ramaswami, and Jin~Billy Li.
+\newblock Reliable identification of genomic variants from rna-seq data.
+\newblock \emph{American journal of human genetics}, 93:\penalty0 641--651,
+  October 2013.
+\newblock ISSN 1537-6605.
+\newblock \doi{10.1016/j.ajhg.2013.08.008}.
+
+\bibitem[Koboldt(2020)]{Koboldt2020}
+Daniel~C. Koboldt.
+\newblock Best practices for variant calling in clinical sequencing.
+\newblock \emph{Genome medicine}, 12:\penalty0 91, Oct 2020.
+
+\bibitem[GATK(2021)]{GATK_best_RNAseq}
+GATK.
+\newblock Are there best practices for calling variants in rnaseq data?, 2021.
+\newblock URL
+  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035889711-Are-there-Best-Practices-for-calling-variants-in-RNAseq-data-}.
+
+\bibitem[Ariel et~al.(2021)Ariel, Brouard, Marete, Miglior, Ibeagha-Awemu, and
+  Bissonnette]{Ariel2021}
+Olivier Ariel, Jean-Simon Brouard, Andrew Marete, Filippo Miglior, Eveline
+  Ibeagha-Awemu, and Nathalie Bissonnette.
+\newblock Genome-wide association analysis identified both rna-seq and dna
+  variants associated to paratuberculosis in canadian holstein cattle 'in
+  vitro' experimentally infected macrophages.
+\newblock \emph{BMC genomics}, 22:\penalty0 162, Mar 2021.
+
+\end{thebibliography}
