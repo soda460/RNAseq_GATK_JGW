@@ -10,21 +10,22 @@
 \BOOKMARK [1][-]{section.3}{Methods}{}% 10
 \BOOKMARK [2][-]{subsection.3.1}{Downloading scripts used in this tutorial}{section.3}% 11
 \BOOKMARK [2][-]{subsection.3.2}{Downloading the MAP dataset from Sequence Read Archive}{section.3}% 12
-\BOOKMARK [2][-]{subsection.3.3}{Prepare a metadata file and a file organization}{section.3}% 13
-\BOOKMARK [2][-]{subsection.3.4}{Performing STAR alignment}{section.3}% 14
-\BOOKMARK [3][-]{subsubsection.3.4.1}{Generating genome indexes files}{subsection.3.4}% 15
-\BOOKMARK [3][-]{subsubsection.3.4.2}{Aligment with the STAR aligner}{subsection.3.4}% 16
-\BOOKMARK [3][-]{subsubsection.3.4.3}{Adding Splice junctions \(2nd mapping pass\)}{subsection.3.4}% 17
-\BOOKMARK [3][-]{subsubsection.3.4.4}{Sorting and indexing alignment files}{subsection.3.4}% 18
-\BOOKMARK [2][-]{subsection.3.5}{Add Read groups}{section.3}% 19
-\BOOKMARK [2][-]{subsection.3.6}{MarkDuplicates}{section.3}% 20
-\BOOKMARK [3][-]{subsubsection.3.6.1}{The gff3 file}{subsection.3.6}% 21
-\BOOKMARK [2][-]{subsection.3.7}{SplitNCigarReads}{section.3}% 22
-\BOOKMARK [2][-]{subsection.3.8}{Base Quality Recalibration}{section.3}% 23
-\BOOKMARK [3][-]{subsubsection.3.8.1}{BaseRecalibrator first step}{subsection.3.8}% 24
-\BOOKMARK [3][-]{subsubsection.3.8.2}{BaseRecalibrator second step}{subsection.3.8}% 25
-\BOOKMARK [2][-]{subsection.3.9}{Variant Calling}{section.3}% 26
-\BOOKMARK [3][-]{subsubsection.3.9.1}{GVCF part}{subsection.3.9}% 27
-\BOOKMARK [3][-]{subsubsection.3.9.2}{Import DBI }{subsection.3.9}% 28
-\BOOKMARK [3][-]{subsubsection.3.9.3}{Genotype GVCF}{subsection.3.9}% 29
-\BOOKMARK [2][-]{subsection.3.10}{Examine and visualize alignment files}{section.3}% 30
+\BOOKMARK [2][-]{subsection.3.3}{Performing STAR alignment}{section.3}% 13
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Generating genome indexes files}{subsection.3.3}% 14
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Aligment with the STAR aligner}{subsection.3.3}% 15
+\BOOKMARK [3][-]{subsubsection.3.3.3}{Adding Splice junctions \(2nd mapping pass\)}{subsection.3.3}% 16
+\BOOKMARK [3][-]{subsubsection.3.3.4}{Sorting and indexing alignment files}{subsection.3.3}% 17
+\BOOKMARK [2][-]{subsection.3.4}{Add Read groups}{section.3}% 18
+\BOOKMARK [2][-]{subsection.3.5}{MarkDuplicates}{section.3}% 19
+\BOOKMARK [3][-]{subsubsection.3.5.1}{The gff3 file}{subsection.3.5}% 20
+\BOOKMARK [2][-]{subsection.3.6}{SplitNCigarReads}{section.3}% 21
+\BOOKMARK [3][-]{subsubsection.3.6.1}{Prepare reference genome files}{subsection.3.6}% 22
+\BOOKMARK [3][-]{subsubsection.3.6.2}{Run SplitNCigarReads}{subsection.3.6}% 23
+\BOOKMARK [2][-]{subsection.3.7}{Base Quality Recalibration}{section.3}% 24
+\BOOKMARK [3][-]{subsubsection.3.7.1}{BaseRecalibrator first step}{subsection.3.7}% 25
+\BOOKMARK [3][-]{subsubsection.3.7.2}{BaseRecalibrator second step}{subsection.3.7}% 26
+\BOOKMARK [2][-]{subsection.3.8}{Variant Calling}{section.3}% 27
+\BOOKMARK [3][-]{subsubsection.3.8.1}{GVCF part}{subsection.3.8}% 28
+\BOOKMARK [3][-]{subsubsection.3.8.2}{Import DBI }{subsection.3.8}% 29
+\BOOKMARK [3][-]{subsubsection.3.8.3}{Genotype GVCF}{subsection.3.8}% 30
+\BOOKMARK [2][-]{subsection.3.9}{Examine and visualize alignment files}{section.3}% 31

@@ -1,4 +1,4 @@
-\begin{thebibliography}{4}
+\begin{thebibliography}{7}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -18,11 +18,31 @@ Daniel~C. Koboldt.
 \newblock Best practices for variant calling in clinical sequencing.
 \newblock \emph{Genome medicine}, 12:\penalty0 91, Oct 2020.
 
-\bibitem[GATK(2021)]{GATK_best_RNAseq}
+\bibitem[GATK(2021{\natexlab{a}})]{GATK_best_RNAseq}
 GATK.
-\newblock Are there best practices for calling variants in rnaseq data?, 2021.
+\newblock Are there best practices for calling variants in rnaseq data?,
+  2021{\natexlab{a}}.
 \newblock URL
   \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035889711-Are-there-Best-Practices-for-calling-variants-in-RNAseq-data-}.
+
+\bibitem[GATK(2021{\natexlab{b}})]{GATK_RNAseq_variant_discovery}
+GATK.
+\newblock Rnaseq short variant discovery (snps + indels), 2021{\natexlab{b}}.
+\newblock URL
+  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-}.
+
+\bibitem[GATK(2021{\natexlab{c}})]{GATK_gatk4_rnaseq_github}
+GATK.
+\newblock gatk4-rnaseq-germline-snps-indels, 2021{\natexlab{c}}.
+\newblock URL
+  \url{https://github.com/gatk-workflows/gatk4-rnaseq-germline-snps-indels}.
+
+\bibitem[GATK(2021{\natexlab{d}})]{GATK_jointCalling_1}
+GATK.
+\newblock The logic of joint calling for germline short variants,
+  2021{\natexlab{d}}.
+\newblock URL
+  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890431-The-logic-of-joint-calling-for-germline-short-variants}.
 
 \bibitem[Ariel et~al.(2021)Ariel, Brouard, Marete, Miglior, Ibeagha-Awemu, and
   Bissonnette]{Ariel2021}
