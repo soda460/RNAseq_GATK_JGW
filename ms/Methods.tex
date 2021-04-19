@@ -101,7 +101,7 @@ However, execute the latter script would take a lot of times. To take advantage 
 Before using the faster-qdump\_parallel.sh, we need to create a simple list file of the 24 SRR* folders present in the /data folder:
 
 \begin{verbatim}
-ls -d1 SRR5487*>SRR.list
+ls -d1 SRR5487???>SRR.list
 \end{verbatim}
 
 Be sure that the SRR.list file contains the 24 SRR identifiers (without the .sra extension) on separates lines before lauching the paralle version of fasterq.dump.sh which look like:
@@ -153,7 +153,12 @@ wget http://labshare.cshl.edu/shares/gingeraslab/www-data/dobin/\
 STAR/STARgenomes/Old/ENSEMBL/bos_taurus/Bos_taurus.UMD3.1.dna.toplevel.fa;
 \end{verbatim}
 
-To prepare genome index files for STAR, use the genomeGenerate built-in STAR command as in the following script:
+To prepare genome index files for STAR, use the genomeGenerate built-in STAR command.
+Note that you have to create a directory where STAR could buid the index.
+
+mkdir Bos_taurus.UMD3.1.87_index
+
+ as in the following script:
 
 
 \textbf{star\_genome\_index\_builder.sh}

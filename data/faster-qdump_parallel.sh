@@ -13,5 +13,6 @@
 
 input=$(head -n $SGE_TASK_ID SRR.list | tail -n 1)
 
-
-fasterq-dump --split-files $input/$input.sra
+cd $input
+fasterq-dump --split-files $input.sra
+cd ..

@@ -18,6 +18,7 @@ cohort_2.sample.map<BR ALIGN="LEFT"/>>
 		label=<<B>/data</B><BR/>
 fasterq-dump.sh<BR ALIGN="LEFT"/>
 SRA.list<BR ALIGN="LEFT"/>
+star_genome_index_builder.sh<BR ALIGN="LEFT"/>
 star_aligner_batch.sh<BR ALIGN="LEFT"/>
 star_aligner_batch_2nd_pass.sh<BR ALIGN="LEFT"/>
 UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
@@ -140,6 +141,8 @@ samtools_sort_bam.sh<BR ALIGN="LEFT"/>>
 "/" -- "/metadata";
 
 "/data" -- "/SRR5487372"
+"/data" -- "/Bos_taurus.UMD3.1.87_index"
+
 
 "/analysis" -- "/GenomicsDBImport";	
 "/analysis" -- "/MarkDuplicates";	
@@ -152,6 +155,10 @@ samtools_sort_bam.sh<BR ALIGN="LEFT"/>>
 "/STAR" -- "/output"
 "/STAR" -- "/output_2nd_pass"
 "/output" -- "outputSRR5487372"
+
+
+
+
 
 
 "/SplitNCigarReads" -- "/gatk_tmp";
