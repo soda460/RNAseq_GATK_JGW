@@ -156,10 +156,15 @@ STAR/STARgenomes/Old/ENSEMBL/bos_taurus/Bos_taurus.UMD3.1.dna.toplevel.fa;
 To prepare genome index files for STAR, use the genomeGenerate built-in STAR command.
 Note that you have to create a directory where STAR could buid the index.
 
+\begin{verbatim}
 mkdir Bos_taurus.UMD3.1.87_index
+\end{verbatim}
 
  as in the following script:
 
+\begin{verbatim}
+cat Bos_taurus.UMD3.1.87_index/chrName.txt | head -n 34
+\end{verbatim}
 
 \textbf{star\_genome\_index\_builder.sh}
 \begin{verbatim}
@@ -189,21 +194,29 @@ At this step, we align our raw .fastq files with the STAR aligner.
 
 %STAR fisrt pass
 \begin{verbatim}
-#! /bin/bash
+#!/bin/bash
+#$ -V
+#$ -N 'STAR_aligner'
 #$ -S /bin/bash
 #$ -cwd
-#$ -N 'STAR_aligner'
-#$ -pe smp 12
-#$ -o ./qsub_log.txt
-#$ -e ./qsub_err.txt
+#$ -j y
+#$ -b n
+#$ -e e
+#$ -o STAR_aligner_1st_pass.$TASK_ID.log
+#$ -q all.q
+#$ -t 1-24
+#$ -pe smp 4
 
-for i in `ls -d SRR*`; do
-echo "Performing STAR alignemnt with $i"
-mkdir -p ../analysis/STAR/output/$i
-STAR --genomeDir ../analysis/STAR/Bos_taurus.UMD3.1.87_index \
+
+input=$(head -n $SGE_TASK_ID SRR.list | tail -n 1)
+
+
+mkdir -p ../analysis/STAR/output/$input
+
+STAR --genomeDir ./Bos_taurus.UMD3.1.87_index \
 --runThreadN 12 \
---readFilesIn  ./$i/$i"_1.fastq" ./$i/$i"_2.fastq" \
---outFileNamePrefix ../analysis/STAR/output/$i \
+--readFilesIn  ./$input/$input"_1.fastq" ./$input/$input"_2.fastq" \
+--outFileNamePrefix ../analysis/STAR/output/$input \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
 --outSAMattributes Standard
@@ -213,29 +226,41 @@ STAR --genomeDir ../analysis/STAR/Bos_taurus.UMD3.1.87_index \
 
 \subsubsection{Adding Splice junctions (2nd mapping pass)}
 
-GATK workflow recommend to perform 2-pass mapping with the STAR aligner. The 2nd mapping pass is identical to the first alignment except that all splice junctions discovered in the first pass are given to the programs. Simply specify a list of all splice junctions files after the --sjdbFileChrStartEnd argument.
+GATK workflow recommend to perform 2-pass mapping with the STAR aligner. The 2nd mapping pass is identical to the first alignment except that all splice junctions discovered in the first pass are given as input to the programs, allowing to XXXX. Simply specify a list of all splice junctions files after the --sjdbFileChrStartEnd argument.
 
+
+\begin{verbatim}
+----outTmpDir ../analysis/STAR/output_2nd_pass/_STARtmp_$TASK_ID \
+\end{verbatim}
 
 %STAR 2nd pass listing
 \begin{verbatim}
-#! /bin/bash
+#!/bin/bash
+#$ -V
+#$ -N 'STAR_aligner_2nd_pass'
 #$ -S /bin/bash
 #$ -cwd
-#$ -N 'STAR_aligner_2nd_pass'
-#$ -pe smp 12
-#$ -o ./qsub_log.txt
-#$ -e ./qsub_err.txt
+#$ -j y
+#$ -b n
+#$ -e e
+#$ -o STAR_aligner_2nd_pass.$TASK_ID.log
+#$ -q all.q
+#$ -t 1-24
+#$ -pe smp 4
 
-for i in `ls -d SRR*`; do	
-echo "Performing STAR alignemnt (2nd pass) with $i"
-mkdir -p ../analysis/STAR/output_2nd_pass/$i
-STAR --genomeDir ../analysis/STAR/Bos_taurus.UMD3.1.87_index \
---runThreadN 12 \
---readFilesIn  ./$i/$i"_1.fastq" ./$i/$i"_2.fastq" \
---outFileNamePrefix ../analysis/STAR/output_2nd_pass/$i \
+
+input=$(head -n $SGE_TASK_ID SRR.list | tail -n 1)
+
+mkdir -p ../analysis/STAR/output_2nd_pass/$input
+
+STAR --genomeDir ./Bos_taurus.UMD3.1.87_index \
+--runThreadN 4 \
+--readFilesIn  ./$input/$input"_1.fastq" ./$input/$input"_2.fastq" \
+--outFileNamePrefix ../analysis/STAR/output_2nd_pass/$input \
 --outSAMtype BAM SortedByCoordinate \
 --outSAMunmapped Within \
 --outSAMattributes Standard \
+--outTmpDir ../analysis/STAR/output_2nd_pass/_STARtmp_$SGE_TASK_ID \
 --sjdbFileChrStartEnd \
 ../analysis/STAR/output/SRR5487372SJ.out.tab \
 ../analysis/STAR/output/SRR5487384SJ.out.tab \
@@ -261,36 +286,61 @@ STAR --genomeDir ../analysis/STAR/Bos_taurus.UMD3.1.87_index \
 ../analysis/STAR/output/SRR5487418SJ.out.tab \
 ../analysis/STAR/output/SRR5487430SJ.out.tab \
 ../analysis/STAR/output/SRR5487442SJ.out.tab
-done
 
 \end{verbatim}
 
 
 
-\subsubsection{Sorting and indexing alignment files}
+\subsubsection{Sorting alignment files}
 
 
-After you align your sequences. You will want that your .bam files to be indexed and sorted by coordinates. As mentioned earlier, STAR allows the output to be sorted by coordinates. If you have carefully followed this tutorial, there is no need to sort again your bam files and you can safely ignore the next step. However, if for any reasons, your aligmnents files are not sorted adequately, the sort option of samtools is as easy as :
+After you align your sequences. You will want that your .bam files to be indexed and sorted by coordinates. As mentioned earlier, STAR allows the output to be sorted by coordinates. If you have carefully followed this tutorial, there is no need to sort again your bam files and you can safely ignore the next step and jump to the next subheading. However, if for any reasons, your aligmnents files are not sorted adequately, the sort option of samtools is as easy as :
 
 \begin{verbatim}
 samtools sort file.bam -o file_sorted.bam
 \end{verbatim}
 
-For our data, a single qsub command with the following script will sort the operations sequentially:
+In a folder containing unsorted alignment, first prepare a list of bam files to be sorted with:
+
+\begin{verbatim}
+ls -1 *.bam > bam.list
+\end{verbatim}
+
+For our data, a qsub script would allow to re-sort our alignments files:
 
 
 % samtools sort listing
 \begin{verbatim}
 #!/bin/bash
+#$ -V
+#$ -N samtools_sort
 #$ -S /bin/bash
 #$ -cwd
-for i in `ls SRR5487400Aligned*.bam | xargs basename -s '.bam'`; do
- samtools sort $i.bam -o $i"_sorted.bam"
-done 
+#$ -j y
+#$ -b n
+#$ -e e
+#$ -o o
+#$ -q all.q
+#$ -t 1-24
+#$ -pe smp 2
+
+input=$(head -n $SGE_TASK_ID bam.list | tail -n 1 | xargs basename -s '.bam')
+
+samtools sort $input.bam -o $input"_sorted.bam"
+
 \end{verbatim}
 
+Note that this listing could be used as a template to perform a variety of samtools subcommands that involve renaming the output files.
 
-In the STAR output folder, prepare a list of bam files to be indexed with:
+
+\subsubsection{Indexing alignment files}
+
+BAM files (the binary analog of Sequence Alignment Mapping (SAM) files) are very efficient bioinformatic files designed to store high-throughput alignment data. Typically, they contains the result of the alignment of millions of sequencing reads against a reference genome and greatly from being accompagnied with index files for faster random access to the aligned reads. In practice most programs will simply don't work without  
+
+ 
+BAM files need to be sorted before being indexed
+
+To index all bam files present in the STAR output_2nd_pass folder, first prepare a list of bam files to be indexed with:
 
 \begin{verbatim}
 ls -1 *.bam > bam.list
@@ -319,7 +369,7 @@ where the latter script looks like:
 #$ -t 1-24
 #$ -pe smp 2
 
-input=$(head -n $SGE_TASK_ID samples.list | tail -n 1)
+input=$(head -n $SGE_TASK_ID bam.list | tail -n 1)
 
 samtools index $input
 \end{verbatim}
@@ -328,14 +378,17 @@ samtools index $input
 
 
 
-\subsection{Add Read groups}
+\subsection{Adding Read groups}
+
+Contrarily to fastq, SAM files have the capacity to handle large amount of metadata. A good practice would be to include informations about the reference genome and the samples in aligment files. Informations about the processing steps could also figure in alignment files. Many programs will add this metadata information when manipulating SAM files.
+
 
 Before running any GATK workflow, one will need to add Read groups. This step ensure that relevant informations about the sequencing process are assigned to each read in an alignment file. When this step is done carefully, it allow to correct sequencing biais that could arise from...
 
 
 Here, we will set the flowcells, sequencing lanes and sample barcode in the platform unit (PU) tag.
 
-Before running the main script, we will extract some important columns from our metadata file and place them in separate files that will be used to populate important fields of the read groups. Here our metadata .csv file:
+Before running the main script, we will extract some important columns from our metadata file and place them in separate files that will be used to populate important fields of the read groups. Given metadata from our 24 samples:
 
 \begin{verbatim}
 sample,cowID,SRAID,Run,RGPU
@@ -365,8 +418,12 @@ L_CTL24,cowL,SRS2153841,SRR5487438,C547FACXX.7.AGTCAA
 L_MAP24,cowL,SRS2153845,SRR5487442,C547FACXX.7.GTCCGC
 \end{verbatim}
 
- 
-The RGLB.txt file will hold the library name. In this case, we will use the sample name
+The following commands will produce 
+The RGLB.txt file will hold the library name. In this case, we will use the sample name.
+The RGPU is more complex. IT contains informations about X, Y and Z.
+
+
+
 \begin{verbatim}
 # Corresponding to the sample name
 cut -f 1 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGLB.txt
@@ -441,14 +498,6 @@ samtools view -H sample.bam | grep '@RG'
 Duplicate reads can arise from PCR duplication artifacts that take place during the library construction or from reading errors that occur during the sequencing process (optical duplicates). Regardless of their origin, these reads need to be identified in alignment files. The MarkDuplicate program from the picard tools have many options to deal with these issue and output some metrics. For example, the program offer the possibility to completey remove the duplicate reads and to make the distinction between optical and PCR duplicates.
 
 Since this tool require a
-
-
-
-
-
-
-
-
 
 
 

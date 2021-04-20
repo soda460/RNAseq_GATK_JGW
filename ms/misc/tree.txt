@@ -18,23 +18,30 @@ cohort_2.sample.map<BR ALIGN="LEFT"/>>
 		label=<<B>/data</B><BR/>
 fasterq-dump.sh<BR ALIGN="LEFT"/>
 SRA.list<BR ALIGN="LEFT"/>
+SRR.list<BR ALIGN="LEFT"/>
+
 star_genome_index_builder.sh<BR ALIGN="LEFT"/>
 star_aligner_batch.sh<BR ALIGN="LEFT"/>
 star_aligner_batch_2nd_pass.sh<BR ALIGN="LEFT"/>
+STAR_aligner_1st_pass.1.log<BR ALIGN="LEFT"/>
+STAR_aligner_2nd_pass.1.logg<BR ALIGN="LEFT"/>
+
 UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
-UMD3.1_chromosomes_e.fa<BR ALIGN="LEFT"/>
-SRR5487372_1.fastq<BR ALIGN="LEFT"/>
-SRR5487372_2.fastq<BR ALIGN="LEFT"/>>
+UMD3.1_chromosomes_e.fa<BR ALIGN="LEFT"/>>
+
+
+
+
+
 				   ];
 
 "/SRR5487372" [shape=folder,
 				   	label=<<B>/SRR5487372</B><BR/>
-SRR5487372.sra<BR ALIGN="LEFT"/>>
+SRR5487372.sra<BR ALIGN="LEFT"/>
+SRR5487372_1.fastq<BR ALIGN="LEFT"/>
+SRR5487372_2.fastq<BR ALIGN="LEFT"/>>
 				   ];
 
-"outputSRR5487372" [shape=folder,
-				   	label=<<B>/SRR5487372</B><BR/>>
-				   ];
 
 
 
@@ -44,9 +51,18 @@ SRR5487372.sra<BR ALIGN="LEFT"/>>
 		label=<<B>/STAR</B><BR/>
 star_genome_index_builder.sh<BR ALIGN="LEFT"/>
 Bos_taurus.UMD3.1.87.gtf<BR ALIGN="LEFT"/>
-Bos_taurus.UMD3.1.dna.toplevel.fa<BR ALIGN="LEFT"/>
-Bos_taurus.UMD3.1.87_index<BR ALIGN="LEFT"/>>
+Bos_taurus.UMD3.1.dna.toplevel.fa<BR ALIGN="LEFT"/>>
 ];
+
+
+
+"/Bos_taurus.UMD3.1.87_index" [shape=folder,
+							label=<<B>/Bos_taurus.UMD3.1.87_index</B><BR/>
+							bof<BR ALIGN="LEFT"/>>
+							];
+
+
+
 
 "/addReadGroups" [shape=folder,
 				 label=<<B>/addReadGroups</B><BR/>
@@ -112,8 +128,7 @@ refGenome.fasta.fai<BR ALIGN="LEFT"/>>
 				   
 "/output" [shape=folder,
 		  label=<<B>/output</B><BR/>
-bam.list<BR ALIGN="LEFT"/>
-samtools_batch_index.sh<BR ALIGN="LEFT"/>
+
 SRR5487372Aligned.sortedByCoord.out.bam<BR ALIGN="LEFT"/>
 SRR5487372Aligned.sortedByCoord.out.bam.bai<BR ALIGN="LEFT"/>
 SRR5487372Log.final.out<BR ALIGN="LEFT"/>
@@ -124,7 +139,21 @@ SRR5487372SJ.out.tab<BR ALIGN="LEFT"/>>
 				   
 "/output_2nd_pass" [shape=folder,
 		  label=<<B>/output_2nd_pass</B><BR/>
+		  
+		  
+bam.list<BR ALIGN="LEFT"/>
+samtools_batch_index.sh<BR ALIGN="LEFT"/>
+SRR5487372Aligned.sortedByCoord.out.bam<BR ALIGN="LEFT"/>
+SRR5487372Aligned.sortedByCoord.out.bam.bai<BR ALIGN="LEFT"/>
+SRR5487372Log.final.out<BR ALIGN="LEFT"/>
+SRR5487372Log.out<BR ALIGN="LEFT"/>
+SRR5487372Log.progress.out<BR ALIGN="LEFT"/>
+SRR5487372SJ.out.tab<BR ALIGN="LEFT"/>
 samtools_sort_bam.sh<BR ALIGN="LEFT"/>>
+
+
+
+
 				   ];
 				   
 "/gatk_tmp" [shape=folder,
@@ -154,7 +183,6 @@ samtools_sort_bam.sh<BR ALIGN="LEFT"/>>
 "/analysis" -- "/BaseQualityRecalibration";
 "/STAR" -- "/output"
 "/STAR" -- "/output_2nd_pass"
-"/output" -- "outputSRR5487372"
 
 
 

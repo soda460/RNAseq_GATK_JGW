@@ -9,7 +9,7 @@
 #$ -o STAR_aligner_1st_pass.$TASK_ID.log
 #$ -q all.q
 #$ -t 1-24
-#$ -pe smp 6
+#$ -pe smp 4  
 
 
 input=$(head -n $SGE_TASK_ID SRR.list | tail -n 1)

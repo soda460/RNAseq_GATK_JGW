@@ -1,0 +1,37 @@
+digraph G {
+	size="18,18";
+    graph [fontsize=10 fontname="Verdana"];
+    node [shape=record fontsize=10 fontname="Verdana"];
+
+    subgraph cluster_0 {
+        node [style=filled];
+        label = "Data cleanup";
+        fontsize=14;
+  		node1 [label="Raw RNAseq Reads"]
+		node2 [label="Map to Reference\n(STAR 2-pass)"]
+		node3 [label="Add ReadGroups (Picard)"]
+		node4 [label="Mark duplicates & sort (Picard)"]
+		node5 [label="SplitNCigarReads"]
+		node6 [label="Base Recalibration"]
+		node7 [label="Analysis-Ready RNAseq Reads"]
+        color=black;
+    }
+
+    subgraph cluster_2 {
+        node [style=filled];
+        node8 [label="Analysis-Ready RNAseq Reads"]
+		node9 [label="HaplotypeCaller\n(GVCF mode)"]
+		node10 [label="DBI import of GVCF files \n(GVCF mode)"]
+		node11 [label="GenotypeGVCF"]
+		node12 [label="Variant filtering\n(RNAseq-specific settings)"]
+		node13 [label="Filtered variants"]
+        label = "Variant dicovery";
+        fontsize=14;
+        color=black;
+    }
+
+    // Renders fine
+	node1 -> node2 -> node3 -> node4 -> node5 -> node6 -> node7
+	node8 -> node9 -> node10 -> node11 -> node12 -> node13
+
+}
