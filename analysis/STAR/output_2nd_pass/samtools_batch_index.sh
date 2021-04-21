@@ -1,6 +1,6 @@
 #!/bin/bash
 #$ -V
-#$ -N samtools_index
+#$ -N samtools_sort
 #$ -S /bin/bash
 #$ -cwd
 #$ -j y
@@ -11,6 +11,7 @@
 #$ -t 1-24
 #$ -pe smp 2
 
-input=$(head -n $SGE_TASK_ID samples.list | tail -n 1)
+input=$(head -n $SGE_TASK_ID bam.list | tail -n 1)
 
-samtools index $input
+samtools sort $input
+

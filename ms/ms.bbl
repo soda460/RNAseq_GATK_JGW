@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{8}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -52,5 +52,11 @@ Olivier Ariel, Jean-Simon Brouard, Andrew Marete, Filippo Miglior, Eveline
   variants associated to paratuberculosis in canadian holstein cattle 'in
   vitro' experimentally infected macrophages.
 \newblock \emph{BMC genomics}, 22:\penalty0 162, Mar 2021.
+
+\bibitem[GATK(2021{\natexlab{e}})]{GATK_ReadGroups}
+GATK.
+\newblock Read groups, 2021{\natexlab{e}}.
+\newblock URL
+  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}.
 
 \end{thebibliography}

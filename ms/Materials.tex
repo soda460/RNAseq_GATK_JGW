@@ -81,8 +81,6 @@ java -jar $PICARD
 \subsubsection{Samtools, BCFtools and HTSlib}
 
 
-
-
 The Samtools web site (\href{http://www.htslib.org/}{http://www.htslib.org/}) contains a plenty of informations about the samtools suite of gold-standard programs bioinformatic programs designed to read, write, edit, index and view alignments files in the SAM, BAM and CRAM format. Less known, but just as poweful, the BCFtools are the best option to manipulate sequence variants stored in the BCF2, VCF and gVCF format. Finally, The HTSlib are a C library designed to read and write high-throughput sequencing data that is used by both the Samtools and the BCFtools. The HTSlib also contains the tabix and bgzip utilities that are mandatory to work with VCF files.
 
 Mention the 2 2021 references that can be found on the htslib/documentation.
@@ -92,7 +90,8 @@ Since the Samtools, the BCFtools and the HTSlib projects are now divided in thre
 Use the commands below to install the Samtools (and similarly for the BCFtools and HTSlib):
 
 \begin{verbatim}
-wget https://github.com/samtools/samtools/releases/download/1.11/samtools-1.11.tar.bz2
+wget https://github.com/samtools/samtools/releases/download/ \
+1.11/samtools-1.11.tar.bz2
 bzip2 -d samtools-1.11.tar.bz2	
 tar -xvf samtools-1.11.tar
 cd  samtools-1.11

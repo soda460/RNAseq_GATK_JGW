@@ -15,12 +15,11 @@
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
-SAMPLES="$HOME/jsb/springer/metadata/samples.list"
-BAMPATH="$HOME/jsb/springer/analysis/STAR/output_2nd_pass"
-OUTPUT="$HOME/jsb/springer/analysis/addReadGroups"
+SAMPLES="$HOME/jsb/springer2/RNAseq_GATK_JGW/metadata/samples.list"
+BAMPATH="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/STAR/output_2nd_pass"
+OUTPUT="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/addReadGroups"
 
 readarray -t RGLB < ./RGLB.txt
-readarray -t RGSM < ./RGSM.txt
 readarray -t RGPU < ./RGPU.txt
 
 input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
@@ -28,9 +27,10 @@ input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
 java -jar $PICARD AddOrReplaceReadGroups \
        I=$BAMPATH/$input"Aligned.sortedByCoord.out.bam" \
        O=$OUTPUT/$input".bam" \
-       RGLB=$RGLB \
+       RGLB=${RGLB[$SGE_TASK_ID -1]} \
        RGPL=ILLUMINA \
-       RGPU=$RGPU \
+       RGPU=${RGPU[$SGE_TASK_ID -1]} \
+       RGID=${RGPU[$SGE_TASK_ID -1]} \
        RGSM=$input
 
 conda deactivate

@@ -335,12 +335,7 @@ Note that this listing could be used as a template to perform a variety of samto
 
 \subsubsection{Indexing alignment files}
 
-BAM files (the binary analog of Sequence Alignment Mapping (SAM) files) are very efficient bioinformatic files designed to store high-throughput alignment data. Typically, they contains the result of the alignment of millions of sequencing reads against a reference genome and greatly from being accompagnied with index files for faster random access to the aligned reads. In practice most programs will simply don't work without  
-
- 
-BAM files need to be sorted before being indexed
-
-To index all bam files present in the STAR output_2nd_pass folder, first prepare a list of bam files to be indexed with:
+BAM files (the binary analog of Sequence Alignment Mapping (SAM) files) are very efficient bioinformatic files designed to store high-throughput alignment data. Typically, they contain the result of the alignment of millions of sequencing reads against a reference genome and greatly benefit from being  indexed by genomic positions for faster random access to the aligned reads at a specific locus. In practice most programs will complain if in the absence of index files. Note that BAM files need to be sorted before being indexed. To index all bam files present in the STAR output\_2nd\_pass folder, first prepare a list of bam files to be indexed with:
 
 \begin{verbatim}
 ls -1 *.bam > bam.list
@@ -380,15 +375,25 @@ samtools index $input
 
 \subsection{Adding Read groups}
 
-Contrarily to fastq, SAM files have the capacity to handle large amount of metadata. A good practice would be to include informations about the reference genome and the samples in aligment files. Informations about the processing steps could also figure in alignment files. Many programs will add this metadata information when manipulating SAM files.
+Contrarily to fastq, SAM files have the capacity to handle large amount of metadata. A good practice would be to include informations about the reference genome and the samples in aligment files. Informations about the processing steps could also be stored in alignment files. Many programs, such as GATK, will add this metadata information when manipulating SAM/BAM files.
 
 
-Before running any GATK workflow, one will need to add Read groups. This step ensure that relevant informations about the sequencing process are assigned to each read in an alignment file. When this step is done carefully, it allow to correct sequencing biais that could arise from...
+Before running any GATK workflow, one will need to add Read groups. This step ensure that relevant informations about the sequencing process are assigned to each read in an alignment file. When this step is done carefully, it allow to mitigate the consequences of the sequencing biais that might arise due to how the sequencing process was performed \cite{GATK_ReadGroups}. For example, when samples are multiplexed, it is important to known which reads origin from the same library, which were sequenced on the same flowcell, etc. The GATK engine requires the presence of several read group fields to run without errors. To learn more about the Read groups as understant by the GATK team and to learn how to derive this information from read names, one should consult this page: \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}.
+
+Here, we will set the flowcells, sequencing lanes and sample barcode in the PU (Platform Unit) tag. We will also set the PL (Platform/technology used to produce the read) and LB (DNA preparation library identifier) tags. Note that we do not need to set any ID (Read group identifier) is overrided by the PU tag for base recalibration when it is defined.
 
 
-Here, we will set the flowcells, sequencing lanes and sample barcode in the platform unit (PU) tag.
+Before running the main script, we will extract the first and fifth columns from our metadata file and place them in separate files, namely RGLB.txt and  RGPU.txt, that will be further used to populate the LB and PU read groups fields:
 
-Before running the main script, we will extract some important columns from our metadata file and place them in separate files that will be used to populate important fields of the read groups. Given metadata from our 24 samples:
+\begin{verbatim}
+# Corresponding to the sample name
+cut -f 1 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGLB.txt
+
+# Corresponding to the PU tag FLOW CELL 
+cut -f 5 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGPU.txt
+\end{verbatim}
+
+where /metadata/metadata.txt looks like:
 
 \begin{verbatim}
 sample,cowID,SRAID,Run,RGPU
@@ -418,27 +423,16 @@ L_CTL24,cowL,SRS2153841,SRR5487438,C547FACXX.7.AGTCAA
 L_MAP24,cowL,SRS2153845,SRR5487442,C547FACXX.7.GTCCGC
 \end{verbatim}
 
-The following commands will produce 
-The RGLB.txt file will hold the library name. In this case, we will use the sample name.
-The RGPU is more complex. IT contains informations about X, Y and Z.
+
+The RGLB.txt file will therefore hold the library name for each 24 samples (e.g. C\_MAP24, which design a RNAseq library done on the cow C 24h post-infection with the MAP pathogen). The RGPU.txt hold the Platform Unit tag, which is made of three types of informations: the flowcell, sequencing lane and barcode identifiers, with the following format: {FLOWCELL\_BARCODE}.{LANE}.{SAMPLE\_BARCODE}. 
 
 
-
-\begin{verbatim}
-# Corresponding to the sample name
-cut -f 1 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGLB.txt
- 
-# Corresponding to the PU tag FLOW CELL 
-cut -f 5 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGPU.txt
-\end{verbatim}
-
-
-
-
+We use the following script to add read groups in our alignments files. Note that bash arrays are zero-indexed. It is why, we use the value given by \$SGE\_TASK\_ID -1 (0-23) to fetch the correct values in RGLB and RGPU arrays.
 
 %AddOrReplaceReadGroups listing
 \begin{verbatim}
 #!/bin/bash
+
 #$ -V
 #$ -N AddOrReplaceReadGroups
 #$ -S /bin/bash
@@ -452,33 +446,40 @@ cut -f 5 -d ',' ../../metadata/metadata.txt | tail -n +2 > RGPU.txt
 #$ -pe smp 1
 
 eval "$(conda shell.bash hook)"
-conda activate gatk4	
+conda activate gatk4
 
-SAMPLES="$HOME/jsb/springer/metadata/samples.list"
-BAMPATH="$HOME/jsb/springer/analysis/STAR/output_2nd_pass"
-OUTPUT="$HOME/jsb/springer/analysis/addReadGroups"	
+SAMPLES="$HOME/jsb/springer2/RNAseq_GATK_JGW/metadata/samples.list"
+BAMPATH="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/STAR/output_2nd_pass"
+OUTPUT="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/addReadGroups"
 
 readarray -t RGLB < ./RGLB.txt
 readarray -t RGPU < ./RGPU.txt
 
-input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)	
+input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
 
 java -jar $PICARD AddOrReplaceReadGroups \
-	I=$BAMPATH/$input"Aligned.sortedByCoord.out.bam" \
-	O=$OUTPUT/$input".bam" \
-	RGLB=$RGLB \
-	RGPL=ILLUMINA \
-	RGPU=$RGPU \
-	RGSM=$input
-	
+I=$BAMPATH/$input"Aligned.sortedByCoord.out.bam" \
+O=$OUTPUT/$input".bam" \
+RGLB=${RGLB[$SGE_TASK_ID -1]} \
+RGPL=ILLUMINA \
+RGPU=${RGPU[$SGE_TASK_ID -1]} \
+RGID=${RGPU[$SGE_TASK_ID -1]} \
+RGSM=$input
+
 conda deactivate
 \end{verbatim}
 
 
-To validate that the reads groups have been correctly, you could use this simple trick on the .bam files:
+It is highly recommended to validate such editing tasks. Using a simple UNIX trick alloes one to see the read groups of a .bam files:
 
 \begin{verbatim}
-samtools view -H sample.bam | grep '@RG' 
+samtools view -H $i.bam | grep '@RG'	
+\end{verbatim}
+
+With our data, we can iterate on all .bam files and ensure that the reads groups have been correctly set:
+
+\begin{verbatim}
+for i in `tail -n +2 ../../metadata/metadata.txt | cut -f 4 -d ','`; do echo $i; samtools view -H $i.bam | grep '@RG'; done
 \end{verbatim}
 
 
@@ -489,19 +490,9 @@ samtools view -H sample.bam | grep '@RG'
 \subsection{MarkDuplicates}
 
 
+Duplicate reads can arise from PCR duplication artifacts that take place during the library construction or from reading errors that occur during the sequencing process (optical duplicates). Regardless of their origin, these reads need to be identified in alignment files. The MarkDuplicate program from the Picard tools have many options to deal with these issue and output some metrics. For example, the program offer the possibility to completely remove the duplicate reads and to make the distinction between optical and PCR duplicates.
 
-
-
-
-
-
-Duplicate reads can arise from PCR duplication artifacts that take place during the library construction or from reading errors that occur during the sequencing process (optical duplicates). Regardless of their origin, these reads need to be identified in alignment files. The MarkDuplicate program from the picard tools have many options to deal with these issue and output some metrics. For example, the program offer the possibility to completey remove the duplicate reads and to make the distinction between optical and PCR duplicates.
-
-Since this tool require a
-
-
-
-Here we simply identified the duplicate reads:
+Here we will simply identified the duplicate reads in our .bam files before proceeding to the next step:
 
 %MarkDuplicate script
 \begin{verbatim}
@@ -529,97 +520,21 @@ O=$OUTPUT/$input"_marked_duplicates.bam" \
 M=$OUTPUT/$input"_marked_dup_metrics.txt"
 \end{verbatim}
 
-
-
-
-
-BaseRecalibration
-IndexFeatureFile
-
-gatk IndexFeatureFile -input jsb.vcf
-
-
-\subsubsection{The gff3 file}
-
-With the command below, one can see the number of features annotated for each ID in the gff3 file: 
-
-\begin{verbatim}{bash}
-cat Ensembl79_UMD3.1_genes.gff3 | cut -f 1 | uniq -cd
-\end{verbatim}
-
-
-%output of cat Ensembl79 gff3
-The result of this command is:
-\begin{verbatim}
-21287 GK000001.2
-18819 GK000030.2
-26235 GK000002.2
-29793 GK000003.2
-29598 GK000005.2
-18201 GK000004.2
-15375 GK000006.2
-16534 GK000008.2
-28038 GK000007.2
-24860 GK000011.2
-12861 GK000009.2
-23581 GK000010.2
-9839 GK000012.2
-17254 GK000015.2
-11207 GK000014.2
-18771 GK000013.2
-17134 GK000016.2
-14916 GK000017.2
-8554 GK000020.2
-13262 GK000021.2
-26279 GK000018.2
-30597 GK000019.2
-7463 GK000024.2
-15631 GK000022.2
-14696 GK000023.2
-10159 GK000026.2
-14729 GK000029.2
-8317 GK000028.2
-5227 GK000027.2
-17365 GK000025.2
-14 GJ058430.1
-31 GJ058425.1
-3 GJ059486.1
-4 GJ058433.1
-16 GJ058437.1
-15 GJ058424.1
-12 GJ060129.1
-12 GJ059670.1
-124 AY526085.1
-24 GJ059556.1
-9 GJ059463.1
-13 GJ060118.1
-19 GJ060120.1
-16 GJ060032.1
-23 GJ059509.1
-3 GJ058729.1
-3 GJ060027.1
-3 GJ058256.1
-\end{verbatim}
-
-Therefore, to ensure that the gff3 chromosome IDs match those presennt in our alignment files, we need to slightly edit this file to replace the pattern used for the chromosome IDs (GK + 0000 + chromosome number) by solely the chromosome number. This could be done easily with sed:
-
-\begin{verbatim}
-sed -r s'/^GK[0]+([0-9]+).2/\1/'g Ensembl79_UMD3.1_genes.gff3 > Ensembl79_UMD3.1_genes_e.gff3
-\end{verbatim}
-
-Obvisouly it is good idea to inspect the edited file to ensure that the desired changes have been done properly.
-
 \subsection{SplitNCigarReads}
 
-The next step is very specific to RNAseq. Briefly, during this step reads that match align over distinct exons are split and blah.
+Along with the non-GATK alignment of RNAseq raw sequences, the SplitNCigarReads step, called SplitNTrim in the previous versions of GATK workflows, is highly specific to RNAseq analysis. During this step reads that span splice junctions (for example reads that align over distinct exons) are split in smaller reads during the process. This step will produce alignments files that will adequately represent reads that span splice junctions. However, before doing this step, we need to get and prepare reference genome files.
 
-However, before doing this step, we need to get and prepare reference genome files.
+(Distinguish between hard and soft clipped).
 
-\subsubsection{Prepare reference genome files}
 
-Until now, we have work with STAR reference genome which barely contains sequences that are transcribed in RNA. In order to produce alignments files that will adequately represent reads that span splice junctions, the SplitNCigarReads command require the complete reference sequence. At this point, pay attention to download the same version of the refence genome as the one that was used to prepare the STAR genome.
+\subsubsection{Preparing reference genome files}
 
-To get the UMD3.1 assembly, visit \href{https://bovinegenome.elsiklab.missouri.edu/}{https://bovinegenome.elsiklab.missouri.edu/} and download the UMD3.1\_chromosomes.fa.gz and Ensembl79\_UMD3.1\_genes.gff3.gz files. If you inspect the headers of the UMD3.1\_chromosomes.fa, you will notice that each fasta entry contains many fields (e.g. gnl , UMD3.1 Accession numbers). To inspect the fasta headers, simply use grep:
+Until now, we have work with STAR reference genome which barely contains sequences that are transcribed in RNA. In contrast, the GATK SplitNCigarReads command requires to use a complete reference sequence. At this point, one should be advised to download the same version of the full refence genome that was used to prepare the STAR genome.
+
+To get the UMD3.1 assembly, visit \href{https://bovinegenome.elsiklab.missouri.edu/}{https://bovinegenome.elsiklab.missouri.edu/} and download the UMD3.1\_chromosomes.fa.gz and Ensembl79\_UMD3.1\_genes.gff3.gz files.
+
+
+It is crucial that entries in the reference genome match the corresponding ones in the STAR genome. If you inspect the fasta headers of the UMD3.1\_chromosomes.fa, you will notice that each fasta entry contains many fields (e.g. gnl , UMD3.1 Accession numbers):
 
 \begin{verbatim}
 grep ">" UMD3.1_chromosomes.fa
@@ -635,8 +550,15 @@ grep ">" UMD3.1_chromosomes.fa
 >gnl|UMD3.1|GJ060408.1 GPS_000344848.1 NW_003101153.1
 \end{verbatim}
 
+In contrast, the chromosomes entries in the STAR genome are quite different:
 
-It is crucial that entries in the reference genome match the corresponding ones in the STAR genome. One could use the following commands to rename the complicated chromosome entries from the UMD3.1 genome to the plain chromosome numbers as what is seen in the STAR genome:
+\begin{verbatim}
+cat XXXX file in STAR genome
+\end{verbatim}
+
+
+
+One could use the following commands to rename the chromosome identifiers found in the Bos taurus UMD3.1 genome to the plain chromosome numbers as what is seen in the STAR genome:
 
 \begin{verbatim}
 sed -r s'/^>.+Chromosome\s+(\S+)\s+.+/>\1/' UMD3.1_chromosomes.fa > temp1.fa
@@ -648,23 +570,25 @@ rm temp1.fa
 \end{verbatim}
 
 
-Along with the reference genome, many GATK tools will need a dictionary file ending in .dict and an index file ending in .fai.\href{ https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format} { https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format}). These files need to share the same basename as the reference genome. You can prepare the index with:
+Along with the reference genome, many GATK tools will need a dictionary file ending in .dict and an index file ending in .fai.\href{ https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format}{ https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format}). These files need to share the same basename as the reference genome. You can prepare the index with:
 
 \begin{verbatim}
 samtools faidx refGenome.fasta
 \end{verbatim}
 
-Use the GATK CreateSequenceDictionary tool to create the required .dict file:
+On the other hand, use the GATK CreateSequenceDictionary tool to create the required .dict file:
 
 \begin{verbatim}
 gatk CreateSequenceDictionary -R refGenome.fasta
 \end{verbatim}
 
-\subsubsection{Run SplitNCigarReads}
 
-Here the listing for the SplitNCigarReads step:
 
-%SplitNCigarReads listing
+
+\subsubsection{Running SplitNCigarReads}
+
+Having prepared reference genome files and index, we are ready to lauch the following SplitNCigarRead listing:
+
 \begin{verbatim}
 #!/bin/bash
 #$ -V
@@ -678,14 +602,14 @@ Here the listing for the SplitNCigarReads step:
 #$ -q all.q
 #$ -t 1-24
 #$ -pe smp 4
-
+	
 eval "$(conda shell.bash hook)"
 conda activate gatk4
-
+	
 SAMPLES="$HOME/jsb/springer/metadata/samples.list"
 BAMPATH="$HOME/jsb/springer/analysis/MarkDuplicates"
 OUTPUT="$HOME/jsb/springer/analysis/SplitNCigarReads"
-
+	
 input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
 
 gatk SplitNCigarReads \
@@ -693,17 +617,18 @@ gatk SplitNCigarReads \
 -I $BAMPATH/$input"_marked_duplicates.bam" \
 -O $OUTPUT/$input"_SplitNCigarReads.bam" \
 --tmp-dir $output/gatk_tmp
-
+	
 conda deactivate
 \end{verbatim}
 
 
 
+\subsection{Performing base Quality Recalibration}
 
-\subsection{Base Quality Recalibration}
+This optional step figure in DNAseq and RNAseq GATK best practices workflows. This complex procedure, which involves machine learning  consist of re-evaluating all base quality scores assigned by sequencing machines which are prone to systematic technical errors \cite{GATK_BaseQuality}. This procedure lead to more accurate base quality scores overall, a situation that improve the accuracy of variant calling.
 
-This optional step is highly recommended by 
 
+Three steps are proposed : the first one consist of evaluating and 
 
 \subsubsection{BaseRecalibrator first step}
 %BaseRecalibrator first script
@@ -935,3 +860,81 @@ You should keep a copy of the vcf output file in a safe place. It is fairly comm
 
 
 gunzip -c output.vcf.gz > output.vcf
+
+
+
+
+
+
+\subsubsection{The gff3 file}
+
+With the command below, one can see the number of features annotated for each ID in the gff3 file: 
+
+\begin{verbatim}{bash}
+	cat Ensembl79_UMD3.1_genes.gff3 | cut -f 1 | uniq -cd
+\end{verbatim}
+
+
+%output of cat Ensembl79 gff3
+The result of this command is:
+\begin{verbatim}
+	21287 GK000001.2
+	18819 GK000030.2
+	26235 GK000002.2
+	29793 GK000003.2
+	29598 GK000005.2
+	18201 GK000004.2
+	15375 GK000006.2
+	16534 GK000008.2
+	28038 GK000007.2
+	24860 GK000011.2
+	12861 GK000009.2
+	23581 GK000010.2
+	9839 GK000012.2
+	17254 GK000015.2
+	11207 GK000014.2
+	18771 GK000013.2
+	17134 GK000016.2
+	14916 GK000017.2
+	8554 GK000020.2
+	13262 GK000021.2
+	26279 GK000018.2
+	30597 GK000019.2
+	7463 GK000024.2
+	15631 GK000022.2
+	14696 GK000023.2
+	10159 GK000026.2
+	14729 GK000029.2
+	8317 GK000028.2
+	5227 GK000027.2
+	17365 GK000025.2
+	14 GJ058430.1
+	31 GJ058425.1
+	3 GJ059486.1
+	4 GJ058433.1
+	16 GJ058437.1
+	15 GJ058424.1
+	12 GJ060129.1
+	12 GJ059670.1
+	124 AY526085.1
+	24 GJ059556.1
+	9 GJ059463.1
+	13 GJ060118.1
+	19 GJ060120.1
+	16 GJ060032.1
+	23 GJ059509.1
+	3 GJ058729.1
+	3 GJ060027.1
+	3 GJ058256.1
+\end{verbatim}
+
+Therefore, to ensure that the gff3 chromosome IDs match those presennt in our alignment files, we need to slightly edit this file to replace the pattern used for the chromosome IDs (GK + 0000 + chromosome number) by solely the chromosome number. This could be done easily with sed:
+
+\begin{verbatim}
+	sed -r s'/^GK[0]+([0-9]+).2/\1/'g Ensembl79_UMD3.1_genes.gff3 > Ensembl79_UMD3.1_genes_e.gff3
+\end{verbatim}
+
+Obvisouly it is good idea to inspect the edited file to ensure that the desired changes have been done properly.
+
+
+
