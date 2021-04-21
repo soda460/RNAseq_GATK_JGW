@@ -1,4 +1,4 @@
-\begin{thebibliography}{8}
+\begin{thebibliography}{9}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -58,5 +58,11 @@ GATK.
 \newblock Read groups, 2021{\natexlab{e}}.
 \newblock URL
   \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}.
+
+\bibitem[GATK(2021{\natexlab{f}})]{GATK_BaseQuality}
+GATK.
+\newblock Base quality score recalibration, 2021{\natexlab{f}}.
+\newblock URL
+  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890531-Base-Quality-Score-Recalibration-BQSR-}.
 
 \end{thebibliography}

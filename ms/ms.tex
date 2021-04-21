@@ -27,7 +27,13 @@ As mentionned, the Per-sample approach has several drawbacks (cite myself)
 
 An appealing alternative would be to follow most of the GATK Best practices relative to RNAseq data and to take advantage of joint genotyping approach which is avalaible in version 3 and 4 of GATK for germline short variants and indels (ref). The joint-genotyping method has proven to be more sensitive, more flexible and to reduce computational challenges relative to the traditional calling approach \cite{GATK_jointCalling_1}. In addition, the latter approach has the advantage to facilitate the inceremental discovery of variants that origin from distinct cohorts of samples. Technically, this can be achieved by combining parts of the GATK RNAseq workflow and parts of the GATK joint genotyping workflow.
 
-In spite that the protocol described here largely use workflows and concepts developped by the GATK team, the reader should be aware that it has not been validated by GATK experts. We have shown previously that a similar workflow has and we did not ahve experienced any problesm (Brouard)
+
+
+1. Clearer distinction between homozygous reference sites and sites with missing data
+
+
+
+In spite that the protocol described here largely use workflows and concepts developped by the GATK team, the reader should be aware that it has not been validated by GATK experts. We have shown previously that a similar workflow has and we did not have experienced any problesm (Brouard)
 
 Here we present GATK4 and fully updated version of this approach.
 

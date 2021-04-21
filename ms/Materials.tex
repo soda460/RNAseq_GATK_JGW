@@ -20,6 +20,15 @@ conda create -n gatk4 -c bioconda gatk4
 \end{verbatim}
 
 
+In addition, the libraries required to generate some optional plots in the Base quality score recalibration subsection can be installed in the gatk4 environment:
+
+\begin{verbatim}
+conda activate gatk4
+conda install -c conda-forge r-base
+conda install -c r r-ggplot2
+conda install -c r r-gplots
+conda install -c bioconda r-gsalib
+\end{verbatim}
 
 
 \subsubsection{The SRA toolkit programs}
