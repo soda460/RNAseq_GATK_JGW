@@ -26,8 +26,10 @@
 \BOOKMARK [3][-]{subsubsection.3.7.2}{Using ApplyBQSR to adjust the scores}{subsection.3.7}% 26
 \BOOKMARK [3][-]{subsubsection.3.7.3}{Comparing pre- and post-recalibration metrics}{subsection.3.7}% 27
 \BOOKMARK [2][-]{subsection.3.8}{Joint genotyping Variant Calling}{section.3}% 28
-\BOOKMARK [3][-]{subsubsection.3.8.1}{Variant calling \(ERC mode\)}{subsection.3.8}% 29
-\BOOKMARK [3][-]{subsubsection.3.8.2}{Merge of GCVF files}{subsection.3.8}% 30
+\BOOKMARK [3][-]{subsubsection.3.8.1}{Calling variants per-sample \(GVCF mode\)}{subsection.3.8}% 29
+\BOOKMARK [3][-]{subsubsection.3.8.2}{Merging of GCVF files}{subsection.3.8}% 30
 \BOOKMARK [3][-]{subsubsection.3.8.3}{Joint genotyping}{subsection.3.8}% 31
-\BOOKMARK [2][-]{subsection.3.9}{Examine and visualize alignment files}{section.3}% 32
-\BOOKMARK [3][-]{subsubsection.3.9.1}{The gff3 file}{subsection.3.9}% 33
+\BOOKMARK [2][-]{subsection.3.9}{Querying variants}{section.3}% 32
+\BOOKMARK [2][-]{subsection.3.10}{Filtering variants}{section.3}% 33
+\BOOKMARK [2][-]{subsection.3.11}{Examining and visualizing alignment files}{section.3}% 34
+\BOOKMARK [3][-]{subsubsection.3.11.1}{The gff3 file}{subsection.3.11}% 35

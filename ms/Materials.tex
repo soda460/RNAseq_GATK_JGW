@@ -3,7 +3,7 @@
 \subsection{Environment}
 
 
-The vast majority of commands in this tutorial have been carefully tested and fully executed on a remote linux server working with the Sun Grid Engine (SGE) workload manager. Obviously, batch scripts will need to be slightly adapted if another workload manager is in place on your computer cluster or if you intend to perform the analysis locally on a linux machine.
+The vast majority of commands in this tutorial have been carefully tested and fully executed on a remote linux server working with the Sun Grid Engine (SGE) workload manager. Obviously, these batch scripts will need to be slightly adapted if another workload manager is in place on your computer cluster or if you intend to perform the analysis locally on a linux machine.
 
 
 
@@ -13,14 +13,14 @@ The vast majority of commands in this tutorial have been carefully tested and fu
 
 \subsubsection{The GATK suite}
 
-It is suggested to install the gatk4 suite in a separate conda environment. Assuming that you are familiar with the conda package management system, you could install all GATK programs in a environment called 'gatk4' with the following command:
+It is suggested to install the GATK suite in a separate conda environment. Assuming that you are familiar with the conda package management system, you could install all GATK programs in a separate environment (here called 'gatk4') with the following command:
 
 \begin{verbatim}
 conda create -n gatk4 -c bioconda gatk4 
 \end{verbatim}
 
 
-In addition, the libraries required to generate some optional plots in the Base quality score recalibration subsection can be installed in the gatk4 environment:
+Use the following commands to install libraries required to generate some optional plots in the Base quality score recalibration subsection:
 
 \begin{verbatim}
 conda activate gatk4
@@ -33,7 +33,7 @@ conda install -c bioconda r-gsalib
 
 \subsubsection{The SRA toolkit programs}
 
-You can easily download public sequences from the NCBI Sequence Read Archive (SRA) using the NCBI SRA toolkit. Detailed instructions about this tool can be found at \href{https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc}{https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit\_doc.}. However, before using it, do not forget to configure the SRA toolkit program ( \href{https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration}{https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration}.
+You can easily download public sequences from the NCBI Sequence Read Archive (SRA) using the NCBI SRA toolkit. Detailed instructions about this tool can be found at \href{https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc}{https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit\_doc}. However, before using it, do not forget to configure the SRA toolkit program ( \href{https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration}{https://github.com/ncbi/sra-tools/wiki/03.-Quick-Toolkit-Configuration}).
 
 
 Once installed, export the SRA toolkit programs in you PATH:
@@ -42,12 +42,10 @@ Once installed, export the SRA toolkit programs in you PATH:
 export PATH=$PATH:$PWD/sratoolkit.2.10.9-ubuntu64/bin
 \end{verbatim}
 
-You can make this change persistent, by adding the previous line to your .bashrc file.
+As usual, you can make this change persistent, by adding the previous line to your .bashrc file.
 
 
 \subsubsection{The STAR aligner}
-
-The best practices from GATK recommand to align RNA-seq reads with STAR (ref). 
 
 Although you can retrieve and install the STAR aligner with conda, it can be installed easily by just downloading the latest STAR source from releases:
 
@@ -67,11 +65,11 @@ export PATH=$PATH:$PWD/bin/Linux_x86_64
 
 \subsubsection{The Picard tools}
 
-We will use the Picard tools to mark duplicated reads. One could find more information about the picard tools at: 
-\href{https://broadinstitute.github.io/picard/}{https://broadinstitute.github.io/picard/.} One can download the pre-build java program with:
+We will use the Picard tools (\href{https://broadinstitute.github.io/picard/}{https://broadinstitute.github.io/picard/}) to mark duplicated reads. One can download the pre-build java program with:
 
 \begin{verbatim}
-wget https://github.com/broadinstitute/picard/releases/download/2.25.0/picard.jar
+wget https://github.com/broadinstitute/picard/releases/download/\
+2.25.0/picard.jar
 \end{verbatim}
 
 It is recommend to set up an environment variable to act as a shortcut. To make it persistent, simply, add a line to your .bashrc file:
@@ -90,27 +88,26 @@ java -jar $PICARD
 \subsubsection{Samtools, BCFtools and HTSlib}
 
 
-The Samtools web site (\href{http://www.htslib.org/}{http://www.htslib.org/}) contains a plenty of informations about the samtools suite of gold-standard programs bioinformatic programs designed to read, write, edit, index and view alignments files in the SAM, BAM and CRAM format. Less known, but just as poweful, the BCFtools are the best option to manipulate sequence variants stored in the BCF2, VCF and gVCF format. Finally, The HTSlib are a C library designed to read and write high-throughput sequencing data that is used by both the Samtools and the BCFtools. The HTSlib also contains the tabix and bgzip utilities that are mandatory to work with VCF files.
-
-Mention the 2 2021 references that can be found on the htslib/documentation.
+The Samtools web site (\href{http://www.htslib.org/}{http://www.htslib.org/}) contains a plenty of informations about the Samtools suite, a collection of widely used bioinformatic programs designed to read, write, edit, index and view alignments files in the SAM, BAM and CRAM formats \cite{Danecek2021}. Less known, but just as powerful, the BCFtools are the best option to manipulate sequence variants stored in the BCF2, VCF and gVCF format. Finally, The HTSlib are a C library designed to read and write high-throughput sequencing data that is used by both the Samtools and the BCFtools. The HTSlib also contains the tabix and bgzip utilities that are mandatory to work with VCF files.
 
 Since the Samtools, the BCFtools and the HTSlib projects are now divided in three separated repositories, the most straightforward way to make use of these three distinct packages is to build them independently. 
 
 Use the commands below to install the Samtools (and similarly for the BCFtools and HTSlib):
 
 \begin{verbatim}
-wget https://github.com/samtools/samtools/releases/download/ \
+wget https://github.com/samtools/samtools/releases/download/\
 1.11/samtools-1.11.tar.bz2
 bzip2 -d samtools-1.11.tar.bz2	
 tar -xvf samtools-1.11.tar
 cd  samtools-1.11
-./configure --prefix=$HOME/bioinfo_programs/bcftools-1.12
+./configure --prefix=$HOME/bioinfo_programs/samtools-1.11
 \end{verbatim}
 
-And you may wish to add the \\bin directory to your \$PATH:
+And you may wish to add the bin directory to your \$PATH:
 
 \begin{verbatim}
-export PATH=$PATH=/home/AAFC-AAC/brouardjs/bioinfo_programs/bcftools-1.12/bin
+export PATH=$PATH=/home/AAFC-AAC/brouardjs/bioinfo_programs/\
+samtools-1.11/bin
 \end{verbatim}
 
 

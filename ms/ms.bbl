@@ -1,4 +1,4 @@
-\begin{thebibliography}{9}
+\begin{thebibliography}{13}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -44,6 +44,16 @@ GATK.
 \newblock URL
   \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890431-The-logic-of-joint-calling-for-germline-short-variants}.
 
+\bibitem[Danecek et~al.(2021)Danecek, Bonfield, Liddle, Marshall, Ohan,
+  Pollard, Whitwham, Keane, McCarthy, Davies, and Li]{Danecek2021}
+Petr Danecek, James~K. Bonfield, Jennifer Liddle, John Marshall, Valeriu Ohan,
+  Martin~O. Pollard, Andrew Whitwham, Thomas Keane, Shane~A. McCarthy,
+  Robert~M. Davies, and Heng Li.
+\newblock Twelve years of samtools and bcftools.
+\newblock \emph{GigaScience}, 10, February 2021.
+\newblock ISSN 2047-217X.
+\newblock \doi{10.1093/gigascience/giab008}.
+
 \bibitem[Ariel et~al.(2021)Ariel, Brouard, Marete, Miglior, Ibeagha-Awemu, and
   Bissonnette]{Ariel2021}
 Olivier Ariel, Jean-Simon Brouard, Andrew Marete, Filippo Miglior, Eveline
@@ -52,6 +62,16 @@ Olivier Ariel, Jean-Simon Brouard, Andrew Marete, Filippo Miglior, Eveline
   variants associated to paratuberculosis in canadian holstein cattle 'in
   vitro' experimentally infected macrophages.
 \newblock \emph{BMC genomics}, 22:\penalty0 162, Mar 2021.
+
+\bibitem[Dobin et~al.(2013)Dobin, Davis, Schlesinger, Drenkow, Zaleski, Jha,
+  Batut, Chaisson, and Gingeras]{Dobin2013}
+Alexander Dobin, Carrie~A. Davis, Felix Schlesinger, Jorg Drenkow, Chris
+  Zaleski, Sonali Jha, Philippe Batut, Mark Chaisson, and Thomas~R. Gingeras.
+\newblock Star: ultrafast universal rna-seq aligner.
+\newblock \emph{Bioinformatics (Oxford, England)}, 29:\penalty0 15--21, January
+  2013.
+\newblock ISSN 1367-4811.
+\newblock \doi{10.1093/bioinformatics/bts635}.
 
 \bibitem[GATK(2021{\natexlab{e}})]{GATK_ReadGroups}
 GATK.
@@ -64,5 +84,19 @@ GATK.
 \newblock Base quality score recalibration, 2021{\natexlab{f}}.
 \newblock URL
   \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890531-Base-Quality-Score-Recalibration-BQSR-}.
+
+\bibitem[GATK(2021{\natexlab{g}})]{GATK_BP_Germline}
+GATK.
+\newblock Germline short variant discovery (snps + indels), 2021{\natexlab{g}}.
+\newblock URL
+  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels-}.
+
+\bibitem[Papadopoulos et~al.(2016)Papadopoulos, Datta, Madden, and
+  Mattson]{Papadopoulos2016}
+Stavros Papadopoulos, Kushal Datta, Samuel Madden, and Timothy Mattson.
+\newblock The tiledb array data storage manager.
+\newblock 10:\penalty0 349--360, 2016.
+\newblock ISSN 2150-8097.
+\newblock \doi{10.14778/3025111.3025117}.
 
 \end{thebibliography}

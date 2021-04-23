@@ -1,10 +1,6 @@
 #! /bin/bash
-#$ -S /bin/bash
-#$ -cwd
 #$ -N 'STAR_genome_builder'
-#$ -pe smp 6
-#$ -o ./qsub_log.txt
-#$ -e ./qsub_err.txt 
+#$ -o ./star_genome_builder_log.txt
 
 STAR --runThreadN 6 \
 --runMode genomeGenerate \

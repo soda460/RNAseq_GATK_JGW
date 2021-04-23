@@ -2,10 +2,10 @@
 
 \usepackage[T1]{fontenc}
 \usepackage{graphicx}
-\usepackage{hyperref}
-\usepackage{natbib}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[numbers]{natbib}
 
-\setlength{\parindent}{0pt} %to avoid the first line indent throughout the documen
+%\setlength{\parindent}{0pt} %to avoid the first line indent throughout the documen
 
 \title{Variant calling from RNA-seq data using the GATK joint genotyping workflow}
 \author{Jean-Simon Brouard}
@@ -27,7 +27,7 @@ As mentionned, the Per-sample approach has several drawbacks (cite myself)
 
 An appealing alternative would be to follow most of the GATK Best practices relative to RNAseq data and to take advantage of joint genotyping approach which is avalaible in version 3 and 4 of GATK for germline short variants and indels (ref). The joint-genotyping method has proven to be more sensitive, more flexible and to reduce computational challenges relative to the traditional calling approach \cite{GATK_jointCalling_1}. In addition, the latter approach has the advantage to facilitate the inceremental discovery of variants that origin from distinct cohorts of samples. Technically, this can be achieved by combining parts of the GATK RNAseq workflow and parts of the GATK joint genotyping workflow.
 
-
+More details about the incremental discovery can be found here:
 
 1. Clearer distinction between homozygous reference sites and sites with missing data
 

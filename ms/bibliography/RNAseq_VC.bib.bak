@@ -149,6 +149,16 @@
   year   = {2021},
 }
 
+@Electronic{GATK_BP_Germline,
+  author   = {GATK},
+  title    = {Germline short variant discovery (SNPs + Indels)},
+  url      = {https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels-},
+  year     = {2021},
+  keywords = {prio1},
+  priority = {prio1},
+}
+
+
 @Electronic{GATK_ReadGroups,
   author   = {GATK},
   title    = {Read groups},
@@ -170,6 +180,42 @@
   title  = {RNAseq short variant discovery (SNPs + Indels)},
   url    = {https://gatk.broadinstitute.org/hc/en-us/articles/360035531192-RNAseq-short-variant-discovery-SNPs-Indels-},
   year   = {2021},
+}
+
+@Article{Danecek2021,
+  author          = {Danecek, Petr and Bonfield, James K. and Liddle, Jennifer and Marshall, John and Ohan, Valeriu and Pollard, Martin O. and Whitwham, Andrew and Keane, Thomas and McCarthy, Shane A. and Davies, Robert M. and Li, Heng},
+  journal         = {GigaScience},
+  title           = {Twelve years of SAMtools and BCFtools.},
+  year            = {2021},
+  issn            = {2047-217X},
+  month           = feb,
+  volume          = {10},
+  abstract        = {SAMtools and BCFtools are widely used programs for processing and analysing high-throughput sequencing data. They include tools for file format conversion and manipulation, sorting, querying, statistics, variant calling, and effect analysis amongst other methods. The first version appeared online 12 years ago and has been maintained and further developed ever since, with many new features and improvements added over the years. The SAMtools and BCFtools packages represent a unique collection of tools that have been used in numerous other software projects and countless genomic pipelines. Both SAMtools and BCFtools are freely available on GitHub under the permissive MIT licence, free for both non-commercial and commercial use. Both packages have been installed >1 million times via Bioconda. The source code and documentation are available from https://www.htslib.org.},
+  citation-subset = {IM},
+  country         = {United States},
+  doi             = {10.1093/gigascience/giab008},
+  issn-linking    = {2047-217X},
+  issue           = {2},
+  keywords        = {bcftools; data analysis; high-throughput sequencing; next generation sequencing; samtools; variant calling},
+  nlm-id          = {101596872},
+  owner           = {NLM},
+  pii             = {giab008},
+  pmc             = {PMC7931819},
+  pmid            = {33590861},
+  pubmodel        = {Print},
+  pubstate        = {ppublish},
+  revised         = {2021-03-10},
+}
+
+
+@Article{Papadopoulos2016,
+  author = {Stavros Papadopoulos and Kushal Datta and Samuel Madden and Timothy Mattson},
+  title  = {The TileDB array data storage manager},
+  year   = {2016},
+  issn   = {2150-8097},
+  pages  = {349-360},
+  volume = {10},
+  doi    = {10.14778/3025111.3025117},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}

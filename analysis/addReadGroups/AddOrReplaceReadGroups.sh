@@ -1,16 +1,6 @@
 #!/bin/bash
-
-#$ -V
 #$ -N AddOrReplaceReadGroups
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
-#$ -o logfile.txt
-#$ -q all.q
-#$ -t 1-24
-#$ -pe smp 1
+#$ -o logfile.$TASK_ID.log
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4
@@ -25,12 +15,12 @@ readarray -t RGPU < ./RGPU.txt
 input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
 
 java -jar $PICARD AddOrReplaceReadGroups \
-       I=$BAMPATH/$input"Aligned.sortedByCoord.out.bam" \
-       O=$OUTPUT/$input".bam" \
-       RGLB=${RGLB[$SGE_TASK_ID -1]} \
-       RGPL=ILLUMINA \
-       RGPU=${RGPU[$SGE_TASK_ID -1]} \
-       RGID=${RGPU[$SGE_TASK_ID -1]} \
-       RGSM=$input
+I=$BAMPATH/$input"Aligned.sortedByCoord.out.bam" \
+O=$OUTPUT/$input".bam" \
+RGLB=${RGLB[$SGE_TASK_ID -1]} \
+RGPL=ILLUMINA \
+RGPU=${RGPU[$SGE_TASK_ID -1]} \
+RGID=${RGPU[$SGE_TASK_ID -1]} \
+RGSM=$input
 
 conda deactivate
