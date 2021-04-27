@@ -1,16 +1,6 @@
 #!/bin/bash
-
-#$ -V
-#$ -N callingGVCF
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
+#$ -N GVCF
 #$ -o singleSampleCallingGVCF_$TASK_ID.log
-#$ -q all.q
-#$ -t 1-24
-#$ -pe smp 4
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4

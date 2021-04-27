@@ -2,104 +2,13 @@
 
 \section{Methods}
 
-\subsection{Downloading scripts used in this tutorial}
-
-To reproduce the workflow presented here, a good starting point would be to download the following GitHub repository:
-
-\begin{verbatim}
-git clone https://github.com/soda460/RNAseq_GATK_JGW.git
-\end{verbatim}
-
-It contains all scripts described in this section as well as several text files that allow to easily reproduce the analysis presented here. Note that some scripts use relative paths. Therefore using the files/folder organization presentend in figure 2 will help to reproduce the results presented here with minimal changes.
-
-\input{figures/fig2}
 
 
-\subsection{Downloading the MAP dataset from Sequence Read Archive}
+\subsection{Performing STAR Alignment}
 
-We will use the complete RNA-seq raw sequences from \citep{Ariel2021}. However, rather than using the 72 samples presented in the article, we will use a subset of 24 representative samples of this study. The \textbf{SRA.list} file located in the data folder contains the SRA identifiers of these 24 samples:
+\subsubsection{Generating Genome Indexes Files}
 
-\begin{verbatim}
-SRS2153774
-SRS2153779
-SRS2153781
-...
-SRS2153841
-SRS2153845
-\end{verbatim}
-
-
-To download these sequences (X Gb), navigate to the /data directory and download the 24 samples with the prefetch command from the SRAtoolkit:
-
-\begin{verbatim}
-prefetch --option-file SRA.list
-\end{verbatim}
-
-To extract fastq files from .sra files, the fasterq-dump command is required. For example, the following command will produce SRR5487396\_R1.fastq.gz and SRR5487396\_R2.fastq.gz files from the SRR5487396.sra archive.
-
-\begin{verbatim}
-fasterq-dump --split-files SRR5487396/SRR5487396.sra
-\end{verbatim}
-
-In practice, you will want to extract all downloaded sequence read archives, which are nested in distinct folders. Navigate to the /data folder and use the following qsub command to lauch the faster-qdump commands sequentially:
-
-\begin{verbatim}
-qsub -V -S /bin/bash -cwd -j y -pe smp 12 faster-qdump_sequential.sh
-\end{verbatim}
-
-where faster-qdump\_sequential.sh is a bash script containing instructions for the SGE workload manager and the code to iterate on all downloaded sequence read archives and produce the forward and reverse fastq files.
-
-\begin{verbatim}
-#! /bin/bash
-#$ -N 'fasterq-dump'
-#$ -o ./faster-qdump_log.txt
-	
-for i in `ls -d SRR*`; do
-	cd $i
-	fasterq-dump --split-files $i.sra
-	cd ..
-done
-\end{verbatim}
-
-
-
-However, executing the latter script would take a lot of times. To take advantage of the capacity of the cluster, one should may consider launching array tasks (task in parallel). To learn more about this, one can visit this page (SGE).
-
-Before using the faster-qdump\_parallel.sh, we need to create a simple list file of the 24 SRR* folders present in the /data folder:
-
-\begin{verbatim}
-ls -d1 SRR5487???>SRR.list
-\end{verbatim}
-
-Be sure that the SRR.list file contains the 24 SRR identifiers (without the .sra extension) on separates lines before lauching the parallel version of fasterq.dump.sh with:
-\begin{verbatim}
-qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 4 faster-qdump_parallel.sh
-\end{verbatim}
-
-\noindent faster-qdump\_parallel.sh:
-\begin{verbatim}
-#!/bin/bash
-#$ -N fasterq-dump
-#$ -o ./fasterq-dump.$TASK_ID.log
-
-input=$(head -n $SGE_TASK_ID SRR.list | tail -n 1)
-
-cd $input
-fasterq-dump --split-files $input.sra
-cd ..
-\end{verbatim}
-
-
-Figure x show how a computationnaly intense task, namely the decompressing of an .sra archive, can be run at the same time with similar input files. This can be done by using the SGE task array capabilities. Technically, the same script is run multiple times, with different values taken by the single environment variable \$SGE\_TASK\_ID. Since many bioinformatic tasks used in this tutorial are computationally intensive, most of the scripts presented thereafter will be base on this model.
-
-
- 
-
-\subsection{Performing STAR alignment}
-
-\subsubsection{Generating genome indexes files}
-
-STAR genomes are available for a limited number of genomes on the Gingeras lab. We will use the for \textit{Bos taurus}  UMD3.1.87 annotations file since the UMD 3.1.1/bosTau8 version of the genome was used in \cite{Ariel2021}. The GTF file describes all exons whereas the .dna.toplevel.fa fasta file contains the corresponding sequences.
+STAR genomes are available for a limited number of genomes on the Gingeras lab. We will use the \textit{Bos taurus} UMD3.1.87 annotations file since the UMD 3.1.1/bosTau8 version of the genome was used in \citep{Ariel2021}. The GTF file describes all exons whereas the .dna.toplevel.fa fasta file contains the corresponding sequences.
 
 
 
@@ -141,7 +50,7 @@ STAR --runThreadN 6 \
 
 
 
-\subsubsection{Aligment with the STAR aligner}
+\subsubsection{Aligning RNAseq reads (1st mapping pass)}
 
 At this step, we align our raw .fastq files with the STAR aligner.
 
@@ -171,9 +80,9 @@ STAR --genomeDir ./Bos_taurus.UMD3.1.87_index \
 
 
 
-\subsubsection{Adding Splice junctions (2nd mapping pass)}
+\subsubsection{Aligning RNAseq reads (2nd mapping pass)}
 
-GATK workflow recommend to perform 2-pass mapping with the STAR aligner. The 2nd mapping pass is identical to the first alignment except that all splice junctions discovered in the first pass are given as input to the programs, allowing to detect more reads mapping to novel junctions  \cite{Dobin2013}. Simply specify a list of all splice junctions files after the --sjdbFileChrStartEnd argument.
+The current recommendation of the GATK Per-sample RNAseq  workflow is to perform 2-pass mapping with the STAR aligner. The 2nd mapping pass is identical to the first alignment except that all splice junctions discovered in the first pass are given as input to the programs, allowing to detect more reads mapping to novel junctions  \cite{Dobin2013}. Simply specify a list of all splice junctions files after the --sjdbFileChrStartEnd argument.
 
 
 \begin{verbatim}
@@ -208,7 +117,7 @@ STAR --genomeDir ./Bos_taurus.UMD3.1.87_index \
 
 
 
-\subsubsection{Sorting alignment files}
+\subsubsection{Sorting Alignment Files}
 
 
 After you align your sequences. You will want that your .bam files to be indexed and sorted by coordinates. As mentioned earlier, STAR allows the output to be sorted by coordinates. If you have carefully followed this tutorial, there is no need to sort again your bam files and you can safely ignore the next step and jump to the next subheading. However, if for any reasons, your aligmnents files are not sorted adequately, the sorting by coordinates with the Samtools is as easy as :
@@ -223,14 +132,14 @@ In a folder containing unsorted alignments, first prepare a list of bam files to
 ls -1 *.bam > bam.list
 \end{verbatim}
 
-For our data, a qsub script would allow to re-sort our alignments files:
+For our data, a qsub script we could re-sort our alignments files with:
 
 
 \begin{verbatim}
 qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 2 samtools_sort_bam.sh
 \end{verbatim}
 
-This listing could also be used as a template to perform a variety of Samtools subcommands that involve renaming the output files.
+The following listing could also be used as a template to perform a variety of Samtools subcommands that involve renaming the output files.
 
 \noindent samtools\_sort\_bam.sh
 \begin{verbatim}
@@ -246,7 +155,7 @@ samtools sort $input.bam -o $input"_sorted.bam"
 \end{verbatim}
 
 
-\subsubsection{Indexing alignment files}
+\subsubsection{Indexing Alignment Files}
 
 BAM files (the binary analog of Sequence Alignment Mapping (SAM) files) are very efficient bioinformatic files designed to store high-throughput alignment data. Typically, they contain the result of the alignment of millions of sequencing reads against a reference genome and greatly benefit from being indexed by genomic positions for faster random access to the aligned reads at a specific locus. In practice most programs will not run in the absence of index files. Obviously, BAM files need to be sorted before being indexed. To index all bam files present in the STAR output\_2nd\_pass folder, first prepare a list of bam files to be indexed with:
 
@@ -276,14 +185,14 @@ samtools index $input
 
 
 
-\subsection{Adding Read groups}
+\subsection{Adding Read Groups}
 
-Contrarily to FASTQ files, SAM files have the capacity to handle large amount of metadata. A good practice would be to include informations about the reference genome and the samples in aligment files. Informations about the processing steps could also be stored in alignment files. Many programs, such as GATK, will add this metadata information when manipulating SAM/BAM files.
+Contrarily to FASTQ files, SAM files have the capacity to handle large amount of metadata. A good practice would be to always include informations about the reference genome and the samples in aligment files. Informations about the processing steps could also be stored. Many programs, such as GATK, will automatically add this kind of metadata information when manipulating SAM/BAM files.
 
 
-Most GATK commands involving BAM files require that Read groups have been defined. This step ensure that relevant informations about the sequencing process are assigned to each read in an alignment file. When this step is done carefully, it allow to mitigate the consequences of the sequencing biais that might arise due to how the sequencing process was performed \cite{GATK_ReadGroups}. For example, when samples are multiplexed, it is important to known which reads origin from the same library, which were sequenced on the same flowcell, etc. The GATK engine requires the presence of several read group fields to run without errors. To learn more about the Read groups as understand by the GATK team and to learn how to derive this information from read names, one should consult this page: \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}.
+Most GATK commands involving BAM files require that read groups have been defined. This step ensure that relevant informations about the sequencing process follow each read in downstream analyses. In addition, when this step is done carefully, it allow the Base recalibration step to mitigate the consequences of the sequencing biais that might arise due to how the sequencing process was performed \cite{GATK_ReadGroups}. For example, when samples are multiplexed, it is important to known which reads origin from the same library, which were sequenced on the same flowcell, etc. The GATK engine requires the presence of several read group fields to run without errors. To learn more about the Read groups as understand by the GATK team and to learn how to derive this information from read names, one should consult this page: \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}.
 
-Here, we will set the flowcells, sequencing lanes and sample barcode in the PU (Platform Unit) tag. We will also set the PL (Platform/technology used to produce the read) and LB (DNA preparation library identifier) tags. Note that the ID (Read group identifier) tag is overrided by the PU tag for base recalibration when it is defined.
+Here, we will set the flowcells, sequencing lanes and sample barcode in the PU (Platform Unit) tag. We will also set the PL (Platform/technology used to produce the read) and LB (DNA preparation library identifier) tags. Note that the ID (Read group identifier) tag is overrided by the PU tag for base recalibration when the latter is defined.
 
 Before running the main script, we will extract the first and fifth columns from our metadata file and place them in separate files, namely RGLB.txt and  RGPU.txt, that will be further used to populate the LB and PU read groups fields:
 
@@ -323,7 +232,7 @@ Use the following command to add read groups in alignments files:
 qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 1 AddOrReplaceReadGroups.sh
 \end{verbatim}
 
-Since Bash arrays are zero-indexed, we use the value given by \$SGE\_TASK\_ID -1 to fetch the correct values in RGLB and RGPU arrays:
+In the following listing, note that we use the value given by \$SGE\_TASK\_ID -1 to fetch the correct values in RGLB and RGPU arrays because Bash arrays are zero-indexed:
 
 \noindent AddOrReplaceReadGroups.sh:
 \begin{verbatim}
@@ -355,14 +264,14 @@ RGSM=$input
 conda deactivate
 \end{verbatim}
 
-
-When present, read groups are written in the header of BAM files. Thus, this simple UNIX trick allows one to quickly inspect the read groups associated to a BAM file:
+After completion of the previous step, we will want to validate that the reads groups have been correctly set. When present, read groups are written in the header of BAM files. Thus, this simple UNIX trick allows one to quickly inspect the read groups associated to a BAM file:
 
 \begin{verbatim}
 samtools view -H sample.bam | grep '@RG'	
 \end{verbatim}
 
-After completion, we can iterate on all our .bam files and ensure that the reads groups have been correctly set:
+
+To iterate on all our .bam files, use something like:
 
 \begin{verbatim}
 for i in `ls *.bam | xargs basename -s '.bam'`;\
@@ -384,10 +293,10 @@ SRR5487382
 
 
 
-\subsection{MarkDuplicates}
+\subsection{Marking Duplicates Reads}
 
 
-Duplicate reads can arise from PCR duplication artifacts that take place during the library construction or from reading errors that occur during the sequencing process (optical duplicates). Regardless of their origin, these reads need to be identified in alignment files. The MarkDuplicate program from the Picard tools have many options to deal with these issue and output some metrics. For example, the program offer the possibility to completely remove the duplicate reads and to make the distinction between optical and PCR duplicates.
+Duplicate reads can arise from PCR duplication artifacts that take place during the library construction or from reading errors that occur during the sequencing process (optical duplicates). Regardless of their origin, these reads need to be identified in alignment files. The MarkDuplicate program from the Picard tools have many options to deal with these issue and output some metrics. For example, the program offers the possibility to completely remove the duplicate reads and to make the distinction between optical and PCR duplicates.
 
 Here we will simply identified the duplicate reads in our .bam files before proceeding to the next step:
 
@@ -414,14 +323,14 @@ O=$OUTPUT/$input"_marked_duplicates.bam" \
 M=$OUTPUT/$input"_marked_dup_metrics.txt"
 \end{verbatim}
 
-\subsection{SplitNCigarReads}
+\subsection{Splitting RNAseq reads}
 
-Along with the non-GATK alignment of RNAseq raw sequences, the SplitNCigarReads step, (formerly called SplitNTrim step in previous versions of GATK workflows), is highly specific to RNAseq analysis. During this step reads that span splice junctions (for example reads that align over distinct exons) are split in smaller reads during the process. This step will produce alignments files that will adequately represent reads that span splice junctions. However, before doing this step, we need to get and prepare reference genome files.
+With the non-GATK alignment of raw sequences, the SplitNCigarReads step, (formerly called SplitNTrim step in previous versions of GATK workflows), is highly specific to RNAseq analysis. During this step reads that span splice junctions (for example reads that align over distinct exons) are split in smaller reads during the process. This step will produce alignments files that will adequately represent reads that span splice junctions. However, before doing this step, we need to get and prepare reference genome files.
 
 
-\subsubsection{Preparing reference genome files}
+\subsubsection{Preparing Reference Genome Files}
 
-Until now, we have work with STAR reference genome which barely contains sequences that are transcribed in RNA. In contrast, the GATK SplitNCigarReads command requires to use a complete reference sequence. At this point, one should be advised to download the same version of the full refence genome that was used to prepare the STAR genome.
+Until now, we have work with STAR reference genome which barely contains sequences that are transcribed in RNA. In contrast, the GATK SplitNCigarReads command requires to use a complete reference sequence. At this point, one should be advised to download the same version of the refence genome that was used to prepare the STAR genome.
 
 To get the UMD3.1 assembly, visit \href{https://bovinegenome.elsiklab.missouri.edu/}{https://bovinegenome.elsiklab.missouri.edu/} and download the UMD3.1\_chromosomes.fa.gz and Ensembl79\_UMD3.1\_genes.gff3.gz files.
 
@@ -448,8 +357,9 @@ In contrast, the chromosomes entries in the STAR genome are quite different:
 cat Bos_taurus.UMD3.1.87_index/chrName.txt | head -n 34
 \end{verbatim}
 
+**SHOW THE RESULT**
 
-One could use the following commands to rename the chromosome identifiers found in the Bos taurus UMD3.1 genome to the plain chromosome numbers as what is seen in the STAR genome:
+Therefore, the chromosome identifiers found in the \textit{Bos taurus} UMD3.1 genome need to be changed to match their counterparts in the STAR genome. This could be achieved with UNIX SED:
 
 \begin{verbatim}
 sed -r s'/^>.+Chromosome\s+(\S+)\s+.+/>\1/' UMD3.1_chromosomes.fa > temp1.fa
@@ -461,7 +371,7 @@ rm temp1.fa
 \end{verbatim}
 
 
-Along with the reference genome, many GATK tools will need a dictionary file ending in .dict and an index file ending in .fai.\href{ https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format}{ https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format}). These files need to share the same basename as the reference genome. You can prepare the index with:
+Along with the reference genome, many GATK tools will need a dictionary file ending in .dict and an index file ending in .fai.\href{https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format}{ https://gatk.broadinstitute.org/hc/en-us/articles/360035531652-FASTA-Reference-genome-format}). These files need to share the same basename as the reference genome. You can prepare the index with:
 
 \begin{verbatim}
 samtools faidx refGenome.fasta
@@ -512,28 +422,27 @@ conda deactivate
 
 
 
-\subsection{Performing base quality score recalibration}
+\subsection{Performing Base Quality Score Recalibration}
 
 Base Quality Score Recalibration (BQSR) is an optional, but highly recommended step, that figure in DNAseq and RNAseq GATK best practices workflows. This complex procedure, which involves binning and machine learning consist of re-evaluating all base quality scores assigned by sequencing machines which are prone to systematic technical errors \cite{GATK_BaseQuality}. This procedure lead to more accurate base calls, a situation that improve the accuracy of variant calling overall. More details about how the model is build and how new quality scores are computed can be found at \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035890531-Base-Quality-Score-Recalibration-BQSR-}{https://gatk.broadinstitute.org/hc/en-us/articles/360035890531-Base-Quality-Score-Recalibration-BQSR-}.
 
 \subsubsection{Using BaseRecalibrator}
 
-In the first key step  a model of covariation is build with two components: the alignement given as input (bam files) and a set of known variants (VCF file). The BaseRecalibrator will then produce a recalibration file which is used in the second key step of the procedure. To perform this task one would need a source of reliable variants in the investigated genome. With human data and other common model organisms, it would be easy to find such sources of variants thanks to the existence of variation databases. Here we use a single VCF file containing the results of the BovineSNP50 genotyping BeadChip to train the model, but you can feed the model with several VCF files.
+In the first key step  a model of covariation is build with two components: the alignement given as input (BAM files) and a set of known variants (VCF file). The BaseRecalibrator will then produce a recalibration file which is used in the second key step of the procedure. To perform this task one would need a source of reliable variants in the investigated genome. With human data and other common model organisms, it would be easy to find such sources of variants, thanks to the existence of variation databases. Here we use a single VCF file containing the results of the BovineSNP50 genotyping BeadChip to train the model, but you can feed the model with several VCF files.
+
+
+
+\begin{verbatim}
+qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 4  BaseRecalibrator_first_step.sh
+\end{verbatim}
+
+
 
 %BaseRecalibrator first script
 \begin{verbatim}
 #!/bin/bash
-#$ -V
 #$ -N BaseRecalibrator
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
 #$ -o BaseQualityRecalibration_$TASK_ID.log
-#$ -q all.q
-#$ -t 1-24
-#$ -pe smp 4
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4
@@ -547,7 +456,7 @@ input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
 gatk BaseRecalibrator \
 -R ./refGenome.fasta \
 -I $BAMPATH/$input"_SplitNCigarReads.bam" \
---known-sites ./jsb.vcf \
+--known-sites ./known.vcf \
 -O $OUTPUT/$input"_recal_data.table"
 
 conda deactivate
@@ -557,26 +466,20 @@ conda deactivate
 
 
 
-\subsubsection{Using ApplyBQSR to adjust the scores}
+\subsubsection{Using ApplyBQSR to Adjust the Scores}
 
 In the second step of the BaseQuality recalibration process, the GATK ApplyBQSR command assigns new scores to each base based on the model produced in the first step and produces new BAM files that reflet these changes.  
+
+\begin{verbatim}
+qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 4  ApplyBQSR_second_step.sh
+\end{verbatim}
 
 
 %ApplyBQSR listing
 \begin{verbatim}
 #!/bin/bash
-
-#$ -V
 #$ -N ApplyBQSR
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
 #$ -o ApplyBQSR_$TASK_ID.log
-#$ -q all.q
-#$ -t 1-24
-#$ -pe smp 4
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4
@@ -610,7 +513,7 @@ gatk AnalyzeCovariates \
 
 
 
-\subsection{Joint genotyping Variant Calling}
+\subsection{Joint Genotyping Variant Calling}
 
 
 The Base recalibration being the final step in the Data cleanup part of the workflow present here (figure 1), we are ready for discovering variants from our analysis-ready RNAseq reads with the joint genoyping approach. Again, this procedure involves several steps which are part of the Germline short variant discovery (SNPs + Indels) Best Practices Workflows \cite{GATK_BP_Germline}. First, we will call variants per-sample with the HaplotypeCaller engine, then we will merge GVCF files with the GenomicsDBImport tool and finally we will perform joint genotyping with the GATK GenotypeGVCFs command.
@@ -618,26 +521,22 @@ The Base recalibration being the final step in the Data cleanup part of the work
 
 
 
-\subsubsection{Calling variants per-sample (GVCF mode)}
+\subsubsection{Calling Variants Per-sample (GVCF mode)}
 %GCVF listing
 
 
-In this step, the GATK variant calling engine, HaplotypeCaller, identifies potential variation sites and record them in GVCF files. This is why this step has been called "GVCF workflow". GVCF files act as intermediate between analysis ready reads (BAM files) and the final joint analysis of multiple samples \cite{GATK_jointCalling_1}. Such intermediate files facilitate the incremental discovery of variants and should be kept since they can be reused in novel rounds of joint genotyping analysis. Our listing to produce GVCF files for each sample reads as follow:
+In this step, the GATK variant calling engine, HaplotypeCaller, identifies candidate variation sites and record them in GVCF files. This is why this step has been called "GVCF workflow". GVCF files act as intermediate between analysis ready reads (BAM files) and the final joint analysis of multiple samples \cite{GATK_jointCalling_1}. Such intermediate files facilitate the incremental discovery of variants and should be kept since they can be reused in novel rounds of joint genotyping analysis. Our listing to produce GVCF files for each sample reads as follow:
 
+\begin{verbatim}
+qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 4  singleSampleGVCFcalling.sh
+\end{verbatim}
+
+singleSampleGVCFcalling.sh:
 
 \begin{verbatim}
 #!/bin/bash
-#$ -V
-#$ -N callingGVCF
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
-#$ -o singleSampleCallingGVCF_$TASK_ID.log
-#$ -q all.q
-#$ -t 1-24
-#$ -pe smp 4
+#$ -N GenotypeGVCF
+#$ -o GenotypeGVCF.log
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4
@@ -650,6 +549,9 @@ echo $SAMPLES
 input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
 
 gatk --java-options "-Xmx4g" HaplotypeCaller \
+‐dontUseSoftClippedBases \​
+‐stand_call_conf 20 \
+‐stand_emit_conf 20 \
 -R ./refGenome.fasta \
 -I $BAMPATH/$input"_recal.bam" \
 -O $OUTPUT/$input".g.vcf.gz" \
@@ -660,20 +562,25 @@ conda deactivate
 
 
 
-
-
 \subsubsection{Merging of GCVF files}
 
-This step has been revised recently by GATK experts by the addition of the novel GATK GenomicsDBImport command. It resembles the former CombineGVCFs command, but promises better performances for parsing of VCF files and computing of values stored in the VCF INFO fields. More details can be found at \href{https://gatk.broadinstitute.org/hc/en-us/articles/360036883491-GenomicsDBImport}{https://gatk.broadinstitute.org/hc/en-us/articles/360036883491-GenomicsDBImport}. Interestingly, under the hood, this command make use of a novel data managament system called  TileDB which is particluarly useful for representing huge sparse 2D arrays such as the genomic data found in VCF files \cite{Papadopoulos2016}. 
+Merging of GCVF files has been revised recently by GATK experts by the addition of the novel GATK GenomicsDBImport command. It resembles the former CombineGVCFs command, but promises better performances for parsing of VCF files and computing values stored in the VCF INFO fields. More details can be found at \href{https://gatk.broadinstitute.org/hc/en-us/articles/360036883491-GenomicsDBImport}{https://gatk.broadinstitute.org/hc/en-us/articles/360036883491-GenomicsDBImport}. Interestingly, under the hood, this command make use of a novel data managament system called  TileDB which is particluarly useful for representing huge sparse 2D arrays such as the genomic data found in VCF files \cite{Papadopoulos2016}. 
 
 
-The command requires a map files that list the full paths of all GVCF files to be included in the resulting database. 
+The command requires a map files, here cohort\_1.sample\_map, that list the full paths of all GVCF files to be included in the resulting database. 
 
 The -L option specifies the range genomic intervals on which the command operate and may be used several times. Since, we are interested to call variants on all bovine autosomes, we used it many times in the following listing:
 
+\begin{verbatim}
+qsub -V -S /bin/bash -cwd -j y -pe smp 12  GenomicsDBImport.sh
+\end{verbatim}
 
 %GenomicsDBImport listing
 \begin{verbatim}
+#!/bin/bash
+#$ -N GenomicsDBImport
+#$ -o GenomicsDBImport.log	
+	
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
@@ -691,39 +598,37 @@ GenomicsDBImport \
 --sample-name-map $SAMPLES/"cohort_1.sample_map" \
 --tmp-dir $HOME/jsb/tmp \
 --reader-threads 5
+
 conda deactivate
 
 \end{verbatim}
 
 
-\subsubsection{Joint genotyping}
+\subsubsection{Joint Genotyping}
 
 The final step in this variant calling workflow, which is actually the joint genotyping step, is performed with the GATK GenotypeGVCFs command (  \href{https://gatk.broadinstitute.org/hc/en-us/articles/360037057852-GenotypeGVCFs}{https://gatk.broadinstitute.org/hc/en-us/articles/360037057852-GenotypeGVCFs}). During this operation, all samples for which variant have been pre-called with HaplotypeCaller are jointly genotyped. This step could be rerun when new samples are available, allowing the so-called incremental discovery of variants.
 
 
 The command take as argument a GenomicsDB workspace created by GenomicsDBImport, which can be seen as a sophisticated database that facilitate the parsing of the genomic data present in GVCF files. Alternatively, a single multi-sample GCVF file produced by CombineGVCFs (used after HaplotypeCaller) can also be given as input.
 
+\begin{verbatim}
+qsub -V -S /bin/bash -cwd -j y -pe smp 12  GenotypeGVCF.sh
+\end{verbatim}
+
+
 %GenotypeGVCFs listing
 \begin{verbatim}
-#!/bin/bash
-#$ -V
 #$ -N GenotypeGVCF
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
 #$ -o GenotypeGVCF.log
-#$ -q all.q
-#$ -pe smp 4
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
 gatk --java-options "-Xmx4g" GenotypeGVCFs \
--R refGenome.fasta \
--V gendb://my_database \
--O output.vcf.gz
+	 -R refGenome.fasta \
+	 -V gendb://my_database \
+	 -O output.vcf.gz
+
 conda deactivate
 \end{verbatim}
 
@@ -733,7 +638,7 @@ conda deactivate
 \subsection{Querying variants}
 
 
-As mentionned earlier, by design, BCFtools are optimized to query and manipulate VCF files. Therefore, it is worth the pain to familiarize with these tools rather than using the plain VCF files with UNIX tricks. In addition, since BCFtools work well with compressed files it would be a waste of time to compress or extract VCF files not to mention the risk of corrupting or erasing a VCF file. Because one can easily erase a file by mistakes when attempting to redirect the result of querying and filtering commands, it is a good practice to keep a copy of the primary VCF output file in a safe place.
+As mentionned earlier, BCFtools are optimized by design, to query and manipulate VCF files. Therefore, it is worth the pain to familiarize with these tools rather than using the plain VCF files with UNIX tricks. In addition, since BCFtools work well with compressed files it would be a waste of time to compress or extract VCF files not to mention the risk of corrupting or erasing a VCF file. Because one can easily erase a file by mistakes when attempting to redirect the result of querying and filtering commands, it is a good practice to keep a copy of the primary VCF output file (output.vcf.gz) in a safe place.
 
 That said, the BCFtools command are highly versatile and can be used in several circumstances ranging from performing simples queries to applying complex filters. Here a few examples:
 
@@ -743,7 +648,7 @@ To get a list of all samples present in a VCF files:
 bcftools query -l output.vcf.gz
 \end{verbatim}
 
-To get useful metrics, like the sequencing depth or the ratio of transitions and transversions use the buil-in stats command:
+To get useful metrics, like the sequencing depth or the ratio of transitions and transversions use the built-in stats command:
 \begin{verbatim}
 bcftools stats output.vcf.gz  > stats.txt
 \end{verbatim}
@@ -759,9 +664,16 @@ bcftools view -H -s SRR5487378,SRR5487390 -r 1:1-100000 output.vcf.gz
 \end{verbatim}
 
 
-It is possible to extract fetch some columns and manipulate them with the query command for example:
+The query command make possible to fetch some VCF columns and manipulate them easily. For example, the command:
+
 \begin{verbatim}
-bcftools query -i'QUAL>20 && INFO/DP>10' -f'chr%CHROM pos:%POS Q:%QUAL DP=%INFO/DP\n' output.vcf.gz | head -n 10
+bcftools query -i 'QUAL>20 && INFO/DP>10' \
+	           -f'chr%CHROM pos:%POS Q:%QUAL DP=%INFO/DP\n' \
+output.vcf.gz | head -n 10
+\end{verbatim}
+
+give the following result:
+\begin{verbatim}
 chr1 pos:242647 Q:2073.95 DP=46
 chr1 pos:242649 Q:2073.95 DP=46
 chr1 pos:245489 Q:31.59 DP=12
@@ -772,8 +684,8 @@ chr1 pos:247219 Q:66.88 DP=12
 chr1 pos:247224 Q:66.88 DP=12
 chr1 pos:247245 Q:98.22 DP=13
 chr1 pos:248413 Q:67.87 DP=22
-
 \end{verbatim}
+
 
 
 
@@ -782,21 +694,14 @@ chr1 pos:248413 Q:67.87 DP=22
 \subsection{Filtering variants}
 
 
-Filtering variants is an active aera of research and the reader is invite to consult the GATK Best practices workflows documentation to be aware of all the novelties.
-
-One would be interested to firstly removed low quality calls with low read depth:
-
-\begin{verbatim}
-bcftools filter -e "QUAL >= 20.0 && INFO/DP >= 10" output.vcf.gz > filtered.vcf.gz
-\end{verbatim}
 
 
-Be aware that both INFO/DP and FORMAT/DP fields exist and have different meanings.
 
+Contrarily to DNAseq workflows where sophisticated methods for filtering variants are available (VQSR and CNNScoreVariants), the current recommandation for RNAseq is to use hard filters as described in the canonical RNAseq Best practice RNAseq short variant discovery workflow \cite{GATK_RNAseq_variant_discovery}. The GATK and Picard tools have several commands to filter variants although the BCFtools filter and view commands could also be used. To perform hard filter, one could use the GATK VariantFiltration command  (\href{https://gatk.broadinstitute.org/hc/en-us/articles/360037269391-VariantFiltration}{https://gatk.broadinstitute.org/hc/en-us/articles/360037269391-VariantFiltration}) which is designed to filter variants on the basis of annotations present in INFO or FORMAT VCF fields.
 
-Contrarily to DNAseq workflows where sophisticated methods for filtering variants are available (VQSR and CNNScoreVariants), the current recommandation for RNAseq is to use hard filters as described in the canonical RNAseq Best practice RNAseq short variant discovery workflow \cite{GATK_RNAseq_variant_discovery}. The GATK and Picard tools has several commands to filter variants although the BCFtools filter and view commands could also be used. To perform hard filter, one could use the GATK VariantFiltration command  (\href{https://gatk.broadinstitute.org/hc/en-us/articles/360037269391-VariantFiltration}{https://gatk.broadinstitute.org/hc/en-us/articles/360037269391-VariantFiltration}) which is designed to filter variants on the basis of annotations in INFO or FORMAT VCF fields.
+Naturally, the extend of filtration steps that could be done depends on the nature of the downstream analysis that will be performed. Filtering variants is an active aera of research and the reader is invite to consult the GATK Best practices workflows documentation to be aware of all the novelties.
 
-Naturally, the extend of filtration steps that could be done depends on the nature of the downstream analysis that will be performed. Among the numerous filtering that could be done, we present here a filtering step specific to RNAseq data that was proposed by GATK experts in previous Best practices workflows, but that should be still appropriate. It consist of filtering out clusters of at least 3 SNPs that are within a window of 35 bases between them.
+Among the numerous filtering that could be done, we present here a filtering step specific to RNAseq data that was proposed by GATK experts in previous Best practices workflows, but that should be still appropriate. It consist of filtering out clusters of at least 3 SNPs that are within a window of 35 bases between them.
 
 
 \begin{verbatim}
@@ -846,7 +751,7 @@ bcftools filter -i 'QD < 2.0' purged.vcf.gz | bcftools view -H | wc -l
 \end{verbatim}
 
 
-To correctly translate the previous recommendation and combine the two criterions, one would be advised to use the logical '||' operator (OR) (rather than '\&\&' (AND) ) because one will want to throw out any variants with fail at least one criterion:
+To correctly translate the previous recommendation and combine the two criterions, one would be advised to use the logical '||' operator (OR) (rather than '\&\&' (AND) ) because one will want to throw out any variants that fail at least one criterion:
 
 \begin{verbatim}
 bcftools filter -i 'FS > 60 || QD < 2.0' purged.vcf.gz | bcftools view -H | wc -l
@@ -861,75 +766,73 @@ bcftools filter -e 'FS > 60 || QD < 2.0' purged.vcf.gz | bgzip -c > newfile.vcf.
 \end{verbatim}
 
 
+Another reasonable hard filtering that can be done would be to exclude calls with poor quality and low read depth:
+
+\begin{verbatim}
+bcftools filter -e "QUAL < 20.0 && INFO/DP < 10" output.vcf.gz > filtered.vcf.gz
+\end{verbatim}
+
 A very intersting ressource to adequately applying other hard filters can be found at \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035890471-Hard-filtering-germline-short-variants}{https://gatk.broadinstitute.org/hc/en-us/articles/360035890471-Hard-filtering-germline-short-variants}.
 
 
 
 
-\subsection{Examining and visualizing alignment files}
+\subsection{Examining and Visualizing Alignment files}
 
-At a moment you will want to visualize alignments files and see the correspondance between called variants found in VCF files and the final alignments.  
+At a moment you will want to visualize alignments files and see the correspondance between called variants found in VCF files and the final alignments. This will allow you to detect potential misaligned regions or other artifacts. Tablet \href{https://ics.hutton.ac.uk/tablet/download-tablet/}{https://ics.hutton.ac.uk/tablet/download-tablet/} and the Integrated Genome viewver \ref{https://software.broadinstitute.org/software/igv/}{https://software.broadinstitute.org/software/igv/} are good choices for such tasks.
 
-Tablet \href{https://ics.hutton.ac.uk/tablet/download-tablet/}{https://ics.hutton.ac.uk/tablet/download-tablet/} and the Integrated Genome viewver (ref) are good choices. 
+\subsubsection{Tweaking the GFF3 file}
 
+If you are interested to add a genome track representing annotated features, the Ensembl UMD 3.1 GFF3 file downloaded previously (subsection x) is your best option. However, as previously, chromosome names in this file differ from those present in the STAR genome and consequently from those present in our alignment files. With the command below, one can see the number of features annotated for each distinct identifier present in the GFF3 file:
 
-To add track to use the gff3 file and again we would need to rename entries to macth those in our .bam files.
-
-
-
-\subsubsection{The gff3 file}
-
-With the command below, one can see the number of features annotated for each ID in the gff3 file: 
-
-\begin{verbatim}{bash}
-	cat Ensembl79_UMD3.1_genes.gff3 | cut -f 1 | uniq -cd
+\begin{verbatim}
+cat Ensembl79_UMD3.1_genes.gff3 | cut -f 1 | uniq -cd
 \end{verbatim}
 
 
 %output of cat Ensembl79 gff3
-Here a summary of the previous command:
+\noindent output:
 \begin{verbatim}
-	21287 GK000001.2
-	18819 GK000030.2
-	26235 GK000002.2
-	29793 GK000003.2
-	...
-	14 GJ058430.1
-	31 GJ058425.1
-	...
-	23 GJ059509.1
-	3 GJ058729.1
-	3 GJ060027.1
-	3 GJ058256.1
+21287 GK000001.2
+18819 GK000030.2
+26235 GK000002.2
+29793 GK000003.2
+...
+14 GJ058430.1
+31 GJ058425.1
+...
+23 GJ059509.1
+3 GJ058729.1
+3 GJ060027.1
+3 GJ058256.1
 \end{verbatim}
 
-Therefore, to ensure that the gff3 chromosome IDs match those presennt in our alignment files, we need to slightly edit this file to replace the pattern used for the chromosome IDs (GK + 0000 + chromosome number) by solely the chromosome number. This could be done easily with sed:
+Therefore,we need to replace the pattern used for the chromosome IDs (GK + 0000 + chromosome number) by solely the chromosome number. This could be done easily with sed:
 
 \begin{verbatim}
-	sed -r s'/^GK[0]+([0-9]+).2/\1/'g Ensembl79_UMD3.1_genes.gff3 \
-	> Ensembl79_UMD3.1_genes_e.gff3
+sed -r s'/^GK[0]+([0-9]+).2/\1/'g Ensembl79_UMD3.1_genes.gff3 \
+> Ensembl79_UMD3.1_genes_e.gff3
 \end{verbatim}
 
 Obvisouly it is good idea to inspect the edited file to ensure that the desired changes have been done properly.
 
 
 
-\begin{verbatim}
-	gunzip -c output.vcf.gz > output.vcf
-\end{verbatim}
+\subsubsection{Inspecting reads from sample SRR5487372}
 
 
-Here a screenshot of sample SRR5487372
+
+Here a screenshot of sample SRR5487372 in chromosome 11 between 
 
 \input{figures/fig3}
 
 
 
-tabix -c purged.vcf.gz
-
 bcftools view -s SRR5487372 -r 11:15063000-15068675  purged.vcf.gz
 
 Figure 3 show an heterozygous call in a exonic region on chromosome 11.
+
+In the upper panel we clearly can accumuilation of reads that correspond to exons from gene XX.
 
 
 

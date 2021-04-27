@@ -1,1 +1,18 @@
 The best practices from GATK recommand to align RNA-seq reads with STAR (ref). 
+
+Be aware that both INFO/DP and FORMAT/DP fields exist and have different meanings.
+
+\begin{verbatim}
+	gunzip -c output.vcf.gz > output.vcf
+\end{verbatim}
+
+
+
+
+tabix -c purged.vcf.gz
+
+
+More details about the incremental discovery can be found here:
+
+1. Clearer distinction between homozygous reference sites and sites with missing data
+

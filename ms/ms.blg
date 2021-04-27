@@ -20,45 +20,45 @@ Warning--entry type for "GATK_best_RNAseq" isn't style-file defined
 Warning--entry type for "GATK_RNAseq_variant_discovery" isn't style-file defined
 --line 178 of file bibliography/RNAseq_VC.bib
 Warning--empty journal in Papadopoulos2016
-You've used 13 entries,
+You've used 14 entries,
             2481 wiz_defined-function locations,
-            635 strings with 7237 characters,
-and the built_in function-call counts, 4594 in all, are:
-= -- 358
-> -- 269
+            644 strings with 7521 characters,
+and the built_in function-call counts, 4996 in all, are:
+= -- 391
+> -- 296
 < -- 8
-+ -- 114
-- -- 82
-* -- 355
-:= -- 765
-add.period$ -- 47
-call.type$ -- 13
-change.case$ -- 26
-chr.to.int$ -- 7
-cite$ -- 14
-duplicate$ -- 211
-empty$ -- 413
-format.name$ -- 95
-if$ -- 950
++ -- 124
+- -- 90
+* -- 390
+:= -- 836
+add.period$ -- 52
+call.type$ -- 14
+change.case$ -- 28
+chr.to.int$ -- 8
+cite$ -- 15
+duplicate$ -- 230
+empty$ -- 445
+format.name$ -- 104
+if$ -- 1033
 int.to.chr$ -- 7
-int.to.str$ -- 14
-missing$ -- 6
-newline$ -- 81
-num.names$ -- 39
-pop$ -- 120
+int.to.str$ -- 15
+missing$ -- 7
+newline$ -- 88
+num.names$ -- 42
+pop$ -- 125
 preamble$ -- 1
-purify$ -- 13
+purify$ -- 14
 quote$ -- 0
-skip$ -- 134
+skip$ -- 144
 stack$ -- 0
-substring$ -- 106
-swap$ -- 37
+substring$ -- 114
+swap$ -- 39
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 91
+type$ -- 98
 warning$ -- 1
-while$ -- 33
+while$ -- 36
 width$ -- 0
-write$ -- 184
+write$ -- 201
 (There were 8 warnings)

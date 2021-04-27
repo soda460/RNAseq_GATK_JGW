@@ -1,15 +1,6 @@
 #!/bin/bash
-
-#$ -V
 #$ -N GenomicsDBImport
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
 #$ -o GenomicsDBImport.log
-#$ -q all.q
-#$ -pe smp 4
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4
