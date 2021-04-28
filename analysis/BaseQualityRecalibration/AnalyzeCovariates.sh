@@ -1,23 +1,13 @@
 #!/bin/bash
-
-#$ -V
 #$ -N AnalyzeCovariates
-#$ -S /bin/bash
-#$ -cwd
-#$ -j y
-#$ -b n
-#$ -e e
 #$ -o AnalyzeCovariates_$TASK_ID.log
-#$ -q all.q
-#$ -t 1-24
-#$ -pe smp 4
 
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
-SAMPLES="$HOME/jsb/springer/metadata/samples.list"
-TABLE_PATH="$HOME/jsb/springer/analysis/BaseQualityRecalibration"
-OUTPUT="$HOME/jsb/springer/analysis/BaseQualityRecalibration"
+SAMPLES="$HOME/jsb/RNAseq_GATK/metadata/samples.list"
+TABLE_PATH="$HOME/jsb/RNAseq_GATK/analysis/BaseQualityRecalibration"
+OUTPUT="$HOME/jsb/RNAseq_GATK/analysis/BaseQualityRecalibration"
 
 
 echo $SAMPLES

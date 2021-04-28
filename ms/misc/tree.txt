@@ -83,6 +83,9 @@ known_sites.vcf.idx<BR ALIGN="LEFT"/>>
 
 "/SplitNCigarReads" [shape=folder,
 				   	label=<<B>/SplitNCigarReads</B><BR/>
+Ensembl79_UMD3.1_genes.gff3<BR ALIGN="LEFT"/>
+UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
+
 SplitNCigarReads.sh<BR ALIGN="LEFT"/>>
 				   ];
 

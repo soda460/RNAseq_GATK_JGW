@@ -5,9 +5,9 @@
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
-SAMPLES="$HOME/jsb/springer2/RNAseq_GATK_JGW/metadata/samples.list"
-BAMPATH="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/STAR/output_2nd_pass"
-OUTPUT="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/addReadGroups"
+SAMPLES="$HOME/jsb/RNAseq_GATK_JGW/metadata/samples.list"
+BAMPATH="$HOME/jsb/RNAseq_GATK_JGW/analysis/STAR/output_2nd_pass"
+OUTPUT="$HOME/jsb/RNAseq_GATK_JGW/analysis/addReadGroups"
 
 readarray -t RGLB < ./RGLB.txt
 readarray -t RGPU < ./RGPU.txt

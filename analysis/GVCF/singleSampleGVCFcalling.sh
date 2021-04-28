@@ -5,9 +5,9 @@
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
-SAMPLES="$HOME/jsb/springer/metadata/samples.list"
-BAMPATH="$HOME/jsb/springer/analysis/BaseQualityRecalibration"
-OUTPUT="$HOME/jsb/springer/analysis/GVCF"
+SAMPLES="$HOME/jsb/RNAseq_GATK/metadata/samples.list"
+BAMPATH="$HOME/jsb/RNAseq_GATK/analysis/BaseQualityRecalibration"
+OUTPUT="$HOME/jsb/RNAseq_GATK/analysis/GVCF"
 
 
 echo $SAMPLES

@@ -2,9 +2,9 @@
 #$ -N MarkDuplicates
 #$ -o logfile.$TASK_ID.log
 
-SAMPLES="$HOME/jsb/springer/metadata/samples.list"
-BAMPATH="$HOME/jsb/springer/analysis/addReadGroups"
-OUTPUT="$HOME/jsb/springer/analysis/MarkDuplicates"
+SAMPLES="$HOME/jsb/RNAseq_GATK_JGW/metadata/samples.list"
+BAMPATH="$HOME/jsb/RNAseq_GATK_JGW/analysis/addReadGroups"
+OUTPUT="$HOME/jsb/RNAseq_GATK_JGW/analysis/MarkDuplicates"
 
 input=$(head -n $SGE_TASK_ID $SAMPLES | tail -n 1)
 

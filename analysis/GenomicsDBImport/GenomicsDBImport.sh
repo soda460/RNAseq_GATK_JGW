@@ -5,12 +5,8 @@
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
-SAMPLES="$HOME/jsb/springer/metadata"
-OUTPUT="$HOME/jsb/springer/analysis/GenomicsDBImport"
-
-
-echo $SAMPLES
-
+SAMPLES="$HOME/jsb/RNAseq_GATK/metadata"
+OUTPUT="$HOME/jsb/RNAseq_GATK/analysis/GenomicsDBImport"
 
 gatk --java-options "-Xmx4g -Xms4g" \
        GenomicsDBImport \
