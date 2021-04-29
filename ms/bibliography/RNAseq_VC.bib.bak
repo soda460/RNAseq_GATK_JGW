@@ -218,4 +218,31 @@
   doi    = {10.14778/3025111.3025117},
 }
 
+@Article{Dobin2013,
+  author          = {Dobin, Alexander and Davis, Carrie A. and Schlesinger, Felix and Drenkow, Jorg and Zaleski, Chris and Jha, Sonali and Batut, Philippe and Chaisson, Mark and Gingeras, Thomas R.},
+  journal         = {Bioinformatics (Oxford, England)},
+  title           = {STAR: ultrafast universal RNA-seq aligner.},
+  year            = {2013},
+  issn            = {1367-4811},
+  month           = jan,
+  pages           = {15--21},
+  volume          = {29},
+  abstract        = {Accurate alignment of high-throughput RNA-seq data is a challenging and yet unsolved problem because of the non-contiguous transcript structure, relatively short read lengths and constantly increasing throughput of the sequencing technologies. Currently available RNA-seq aligners suffer from high mapping error rates, low mapping speed, read length limitation and mapping biases. To align our large (>80 billon reads) ENCODE Transcriptome RNA-seq dataset, we developed the Spliced Transcripts Alignment to a Reference (STAR) software based on a previously undescribed RNA-seq alignment algorithm that uses sequential maximum mappable seed search in uncompressed suffix arrays followed by seed clustering and stitching procedure. STAR outperforms other aligners by a factor of >50 in mapping speed, aligning to the human genome 550 million 2 × 76 bp paired-end reads per hour on a modest 12-core server, while at the same time improving alignment sensitivity and precision. In addition to unbiased de novo detection of canonical junctions, STAR can discover non-canonical splices and chimeric (fusion) transcripts, and is also capable of mapping full-length RNA sequences. Using Roche 454 sequencing of reverse transcription polymerase chain reaction amplicons, we experimentally validated 1960 novel intergenic splice junctions with an 80-90% success rate, corroborating the high precision of the STAR mapping strategy. STAR is implemented as a standalone C++ code. STAR is free open source software distributed under GPLv3 license and can be downloaded from http://code.google.com/p/rna-star/.},
+  citation-subset = {IM},
+  completed       = {2013-07-29},
+  country         = {England},
+  doi             = {10.1093/bioinformatics/bts635},
+  issn-linking    = {1367-4803},
+  issue           = {1},
+  keywords        = {Algorithms; Cluster Analysis; Gene Expression Profiling; Genome, Human; Humans; RNA Splicing; Sequence Alignment, methods; Sequence Analysis, RNA, methods; Software},
+  nlm-id          = {9808944},
+  owner           = {NLM},
+  pii             = {bts635},
+  pmc             = {PMC3530905},
+  pmid            = {23104886},
+  pubmodel        = {Print-Electronic},
+  pubstate        = {ppublish},
+  revised         = {2021-01-09},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}

@@ -5,8 +5,8 @@
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
-SAMPLES="$HOME/jsb/RNAseq_GATK/metadata"
-OUTPUT="$HOME/jsb/RNAseq_GATK/analysis/GenomicsDBImport"
+SAMPLES="$HOME/jsb/RNAseq_GATK_JGW/metadata"
+OUTPUT="$HOME/jsb/RNAseq_GATK_JGW/analysis/GenomicsDBImport"
 
 gatk --java-options "-Xmx4g -Xms4g" \
        GenomicsDBImport \
@@ -41,7 +41,7 @@ gatk --java-options "-Xmx4g -Xms4g" \
       -L 28 \
       -L 29 \
        --sample-name-map $SAMPLES/"cohort_1.sample_map" \
-       --tmp-dir $HOME/jsb/tmp \
+       --tmp-dir $OUTPUT/tmp \
        --reader-threads 5
 conda deactivate
 

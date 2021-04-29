@@ -5,9 +5,9 @@
 eval "$(conda shell.bash hook)"
 conda activate gatk4
 
-SAMPLES="$HOME/jsb/RNAseq_GATK/metadata/samples.list"
-TABLE_PATH="$HOME/jsb/RNAseq_GATK/analysis/BaseQualityRecalibration"
-OUTPUT="$HOME/jsb/RNAseq_GATK/analysis/BaseQualityRecalibration"
+SAMPLES="$HOME/jsb/RNAseq_GATK_JGW/metadata/samples.list"
+TABLE_PATH="$HOME/jsb/RNAseq_GATK_JGW/analysis/BaseQualityRecalibration"
+OUTPUT="$HOME/jsb/RNAseq_GATK_JGW/analysis/BaseQualityRecalibration"
 
 
 echo $SAMPLES

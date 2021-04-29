@@ -8,9 +8,9 @@
 \BOOKMARK [3][-]{subsubsection.2.2.4}{The Picard tools}{subsection.2.2}% 8
 \BOOKMARK [3][-]{subsubsection.2.2.5}{Samtools, BCFtools and HTSlib}{subsection.2.2}% 9
 \BOOKMARK [2][-]{subsection.2.3}{Downloading scripts used in this tutorial}{section.2}% 10
-\BOOKMARK [2][-]{subsection.2.4}{Downloading raw sequences from NCBI SRA}{section.2}% 11
+\BOOKMARK [2][-]{subsection.2.4}{Downloading sequences from NCBI SRA}{section.2}% 11
 \BOOKMARK [1][-]{section.3}{Methods}{}% 12
-\BOOKMARK [2][-]{subsection.3.1}{Performing STAR Alignment}{section.3}% 13
+\BOOKMARK [2][-]{subsection.3.1}{Mapping Reads to Reference \(STAR 2-pass\)}{section.3}% 13
 \BOOKMARK [3][-]{subsubsection.3.1.1}{Generating Genome Indexes Files}{subsection.3.1}% 14
 \BOOKMARK [3][-]{subsubsection.3.1.2}{Aligning RNAseq reads \(1st mapping pass\)}{subsection.3.1}% 15
 \BOOKMARK [3][-]{subsubsection.3.1.3}{Aligning RNAseq reads \(2nd mapping pass\)}{subsection.3.1}% 16
@@ -29,7 +29,7 @@
 \BOOKMARK [3][-]{subsubsection.3.6.1}{Calling Variants Per-sample \(GVCF mode\)}{subsection.3.6}% 29
 \BOOKMARK [3][-]{subsubsection.3.6.2}{Merging of GCVF files}{subsection.3.6}% 30
 \BOOKMARK [3][-]{subsubsection.3.6.3}{Joint Genotyping}{subsection.3.6}% 31
-\BOOKMARK [2][-]{subsection.3.7}{Querying variants}{section.3}% 32
+\BOOKMARK [2][-]{subsection.3.7}{Querying VCF files}{section.3}% 32
 \BOOKMARK [2][-]{subsection.3.8}{Filtering variants}{section.3}% 33
 \BOOKMARK [2][-]{subsection.3.9}{Examining and Visualizing Alignment files}{section.3}% 34
 \BOOKMARK [3][-]{subsubsection.3.9.1}{Tweaking the GFF3 file}{subsection.3.9}% 35

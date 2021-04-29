@@ -16,3 +16,4 @@ More details about the incremental discovery can be found here:
 
 1. Clearer distinction between homozygous reference sites and sites with missing data
 
+First, we will call variants per-sample with the HaplotypeCaller engine, then we will merge GVCF files with the GenomicsDBImport tool and finally we will perform joint genotyping with the GATK GenotypeGVCFs command.

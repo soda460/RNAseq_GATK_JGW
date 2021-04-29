@@ -47,10 +47,16 @@ Jean-Simon Brouard, Flavio Schenkel, Andrew Marete, and Nathalie Bissonnette.
 \newblock ISSN 1674-9782.
 \newblock \doi{10.1186/s40104-019-0359-0}.
 
-\bibitem[GATK(2021{\natexlab{d}})]{GATK_jointCalling_1}
+\bibitem[GATK(2021{\natexlab{d}})]{GATK_BP_Germline}
+GATK.
+\newblock Germline short variant discovery (snps + indels), 2021{\natexlab{d}}.
+\newblock URL
+  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels-}.
+
+\bibitem[GATK(2021{\natexlab{e}})]{GATK_jointCalling_1}
 GATK.
 \newblock The logic of joint calling for germline short variants,
-  2021{\natexlab{d}}.
+  2021{\natexlab{e}}.
 \newblock URL
   \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890431-The-logic-of-joint-calling-for-germline-short-variants}.
 
@@ -83,23 +89,17 @@ Alexander Dobin, Carrie~A. Davis, Felix Schlesinger, Jorg Drenkow, Chris
 \newblock ISSN 1367-4811.
 \newblock \doi{10.1093/bioinformatics/bts635}.
 
-\bibitem[GATK(2021{\natexlab{e}})]{GATK_ReadGroups}
+\bibitem[GATK(2021{\natexlab{f}})]{GATK_ReadGroups}
 GATK.
-\newblock Read groups, 2021{\natexlab{e}}.
+\newblock Read groups, 2021{\natexlab{f}}.
 \newblock URL
   \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}.
 
-\bibitem[GATK(2021{\natexlab{f}})]{GATK_BaseQuality}
+\bibitem[GATK(2021{\natexlab{g}})]{GATK_BaseQuality}
 GATK.
-\newblock Base quality score recalibration, 2021{\natexlab{f}}.
+\newblock Base quality score recalibration, 2021{\natexlab{g}}.
 \newblock URL
   \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035890531-Base-Quality-Score-Recalibration-BQSR-}.
-
-\bibitem[GATK(2021{\natexlab{g}})]{GATK_BP_Germline}
-GATK.
-\newblock Germline short variant discovery (snps + indels), 2021{\natexlab{g}}.
-\newblock URL
-  \url{https://gatk.broadinstitute.org/hc/en-us/articles/360035535932-Germline-short-variant-discovery-SNPs-Indels-}.
 
 \bibitem[Papadopoulos et~al.(2016)Papadopoulos, Datta, Madden, and
   Mattson]{Papadopoulos2016}

@@ -25,7 +25,7 @@ digraph G {
 		node11 [label="GenotypeGVCF"]
 		node12 [label="Variant filtering\n(RNAseq-specific settings)"]
 		node13 [label="Filtered variants"]
-        label = "Variant dicovery";
+        label = "Variant discovery";
         fontsize=14;
         color=black;
     }

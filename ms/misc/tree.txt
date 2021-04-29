@@ -3,6 +3,7 @@ size="18,18";
 rankdir=LR;
 "/metadata" [shape=folder,
 				   	label=<<B>/metadata</B><BR/>
+metadata.txt<BR ALIGN="LEFT"/>
 samples.list<BR ALIGN="LEFT"/>
 cohort_1.sample.map<BR ALIGN="LEFT"/>
 cohort_2.sample.map<BR ALIGN="LEFT"/>>
@@ -16,18 +17,19 @@ cohort_2.sample.map<BR ALIGN="LEFT"/>>
 
 "/data" [shape=folder,
 		label=<<B>/data</B><BR/>
-fasterq-dump.sh<BR ALIGN="LEFT"/>
+faster-qdump_parallel.sh<BR ALIGN="LEFT"/>
+faster-qdump_sequential.sh<BR ALIGN="LEFT"/>
 SRA.list<BR ALIGN="LEFT"/>
 SRR.list<BR ALIGN="LEFT"/>
 
 star_genome_index_builder.sh<BR ALIGN="LEFT"/>
-star_aligner_batch.sh<BR ALIGN="LEFT"/>
-star_aligner_batch_2nd_pass.sh<BR ALIGN="LEFT"/>
-STAR_aligner_1st_pass.1.log<BR ALIGN="LEFT"/>
-STAR_aligner_2nd_pass.1.logg<BR ALIGN="LEFT"/>
+star_aligner.sh<BR ALIGN="LEFT"/>
+star_aligner_2nd_pass.sh<BR ALIGN="LEFT"/>
 
-UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
-UMD3.1_chromosomes_e.fa<BR ALIGN="LEFT"/>>
+STAR_aligner_1st_pass.1.log<BR ALIGN="LEFT"/>
+STAR_aligner_2nd_pass.1.log<BR ALIGN="LEFT"/>>
+
+
 
 
 
@@ -94,9 +96,6 @@ SplitNCigarReads.sh<BR ALIGN="LEFT"/>>
 				   	label=<<B>/GenomicsDBImport</B><BR/>
 GenomicsDBImport.sh<BR ALIGN="LEFT"/>
 GenotypeGVCF.sh<BR ALIGN="LEFT"/>
-refGenome.dict<BR ALIGN="LEFT"/>
-refGenome.fasta<BR ALIGN="LEFT"/>
-refGenome.fasta.fai<BR ALIGN="LEFT"/>
 output.vcf.gz<BR ALIGN="LEFT"/>
 output.vcf.gz.tbi<BR ALIGN="LEFT"/>>
 				   ];
@@ -162,6 +161,11 @@ samtools_sort_bam.sh<BR ALIGN="LEFT"/>>
 "/gatk_tmp" [shape=folder,
 		  label=<<B>/gatk_tmp</B><BR/>>
 			];
+			
+			
+"/dbi_tmp" [shape=folder,
+			label=<<B>/tmp</B><BR/>>
+			];
 				   
 "/my_database" [shape=folder,
 		    label=<<B>/my_database</B><BR/>>
@@ -195,4 +199,5 @@ samtools_sort_bam.sh<BR ALIGN="LEFT"/>>
 "/SplitNCigarReads" -- "/gatk_tmp";
 
 "/GenomicsDBImport" -- "/my_database";
+"/GenomicsDBImport" -- "/dbi_tmp";
 }
