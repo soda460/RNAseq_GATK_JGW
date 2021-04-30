@@ -15,37 +15,28 @@
 
 \begin{abstract}
 	
-The Genome Analysis Toolkit (GATK) developped at the Broad Institute provides state-of-the-art pipelines for germline and somatic variant discovery and genotyping. Unfortunately, the fully validated GATK pipeline for calling variant on RNAseq data is a Per-sample workflow that did not include the recent improvements seen in modern workflows, notably the possibility to perform joint genotyping analysis. Here we describe how modern GATK commands from distinct workflows can be combined to call variants on RNAseq samples. We provide a detailed tutorial which starts with raw RNAseq reads and ends with filtered variants, of which some were shown to be associated with bovine paratuberculosis.
+The Genome Analysis Toolkit (GATK) developped at the Broad Institute provides state-of-the-art pipelines for germline and somatic variant discovery and genotyping. Unfortunately, the fully validated GATK pipeline for calling variant on RNAseq data is a Per-sample workflow that do not include the recent improvements seen in modern workflows, especially the possibility to perform joint genotyping analysis. Here we describe how modern GATK commands from distinct workflows can be combined to call variants on RNAseq samples. We provide a detailed tutorial which starts with raw RNAseq reads and ends with filtered variants, of which some were shown to be associated with bovine paratuberculosis.
 
 \end{abstract}
 
 \section{Introduction}
 Since the introduction of RNAseq, many researchers have seen the opportunity to use this data not only to quantify gene expression levels, but also for discover genomic variations \cite{Piskol2013}. Whereas trusted bioinformatic protocols exist for detecting sequence variants on a variety of DNAseq samples (germline DNA, whole-exome sequencing etc.) that come from distinct contexts \cite{Koboldt2020}, protocols designed to handle RNAseq data are scarce \cite{Piskol2013}. Among all resources available, many rely on the Genome Analysis Toolkit (GATK), an industry standard for variant discovery from next-generation sequencing (NGS) data, developped and maintained by the Broad Institute.
 
+At present the gold-standard for variant calling on RNAseq data is the GATK Per-sample workflow although an updated documentation for calling variants in RNAseq data is in the roadmap of the GATK experts \cite{GATK_best_RNAseq}. Currently, researchers interested in performing variant discovery on RNAseq data have the option of using the fully validated Per-sample workflow \cite{GATK_RNAseq_variant_discovery} or using an advanced work-in-progress workflow designed for cloud computing (e.g Google Cloud Platform) \cite{GATK_gatk4_rnaseq_github}. The Per-sample approach has several drawbacks, notably that only variable positions are reported and that the HaplotypeCaller engine cannot leverage population-wide information when calling variants \cite{Brouard2019, GATK_RNAseq_variant_discovery}.
 
-At present the gold-standard for variant calling on RNAseq data is the GATK Per-sample workflow although an updated documentation for calling variants in RNAseq data is in the roadmap of the GATK experts \cite{GATK_best_RNAseq}. Currently, researchers interested in performing variant discovery on RNAseq data have the option of using the fully validated Per-sample workflow \cite{GATK_RNAseq_variant_discovery} or using an advanced work-in-progress workflow designed for cloud computing (Google Cloud Platform) \cite{GATK_gatk4_rnaseq_github}. The Per-sample approach has several drawbacks, notably that only variable positions are reported and that the HaplotypeCaller engine cannot leverage population-wide information when calling variants \cite{Brouard2019, GATK_RNAseq_variant_discovery}.
+An appealing alternative would be to use guidelines from the GATK Best practices relative to RNAseq data and to take advantage of joint genotyping approach which is available for the Germline short variant discovery (SNPs + Indels) workflow \cite{GATK_BP_Germline}. The joint-genotyping method has proven to be more sensitive, more flexible and to reduce computational challenges relative to the traditional calling approach \cite{GATK_jointCalling_1}. In addition, the latter approach has the advantage to facilitate the incremental discovery of variants that origin from distinct cohorts of samples. Technically, this can be achieved by combining parts of the GATK RNAseq workflow and parts of the GATK joint genotyping workflow (figure 1).
 
-An appealing alternative would be to use guidelines from the GATK Best practices relative to RNAseq data and to take advantage of joint genotyping approach which is available for the Germline short variant discovery (SNPs + Indels) Best Practices Workflows \cite{GATK_BP_Germline}. The joint-genotyping method has proven to be more sensitive, more flexible and to reduce computational challenges relative to the traditional calling approach \cite{GATK_jointCalling_1}. In addition, the latter approach has the advantage to facilitate the incremental discovery of variants that origin from distinct cohorts of samples. Technically, this can be achieved by combining parts of the GATK RNAseq workflow and parts of the GATK joint genotyping workflow (figure 1).
-
-In spite that the protocol described here largely use workflows and concepts developped by the GATK team, it should be pointed out that calling variants on RNAseq data with the joint genotyping workflow has still not been validated by GATK experts. We have shown previously that this approach yield similar if not better results when compared to a Per-sample method \cite{Brouard2019}, but one would be advised to carefully and critically examine the results to detect potential artifacts. Here we present a fully updated version of this approach in the form of an end-to-end analysis of RNAseq samples extracted from 50 dairy cows in the context of studying the mechanism of resistance to bovine paratuberculosis.
+In spite that the protocol described here largely use workflows and concepts developped by the GATK team, it should be pointed out that calling variants on RNAseq data with the joint genotyping workflow has still not been validated by GATK experts. We have shown previously that this approach yield similar if not better results when compared to a Per-sample method \cite{Brouard2019}, but one would be advised to carefully and critically examine the results to detect potential artifacts. Here we present a fully updated version of this approach in the form of an end-to-end analysis of RNAseq samples extracted from 50 dairy cows for studying the mechanism of resistance to bovine paratuberculosis.
 
 \input{figures/fig1}
 
-As shown in figure 1, the workflow presented here involve several steps. In the data cleanup part, the raw RNAseq reads are prepared for RNAseq analysis according to the GATK Best practices relative to RNAseq data. In the variant discovery part, all steps belong to the germline joint genotyping workflow up to the variant filtering steps.  
-
-
+As shown in figure 1, the workflow presented here involve several steps. In the data cleanup part, the raw RNAseq reads are prepared for RNAseq analysis according to the GATK Best practices relative to RNAseq data. In the variant discovery part, all steps belong to the germline joint genotyping workflow up to the variant filtering steps.
 
 In the next section, we describe how the diverse programs required to perform the whole analysis can be installed.
 
 \include{Materials}
-
 \include{Methods}
-
 \bibliographystyle{unsrtnat}
 \bibliography{bibliography/RNAseq_VC}
-
-
-
-
 
 \end{document}

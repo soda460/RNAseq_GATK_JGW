@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.20)  30 APR 2021 13:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.20)  30 APR 2021 15:57
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -288,12 +288,12 @@ Package pdftex.def Info: misc/workflow.png  used on input line 4.
 
  (./Materials.tex
 LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 1
-8.
+4.
 
 (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
 File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
-Overfull \hbox (0.96997pt too wide) in paragraph at lines 35--36
+Overfull \hbox (0.96997pt too wide) in paragraph at lines 31--32
 \T1/cmr/m/n/10 You can eas-ily down-load pub-lic se-quences from the NCBI Se-qu
 ence Read Archive
  []
@@ -301,31 +301,31 @@ ence Read Archive
 [4
 
 ] [5] (./figures/fig2.tex
-<misc/tree.png, id=206, 1413.28pt x 1398.22375pt>
+<misc/tree.png, id=206, 1413.28pt x 1492.57625pt>
 File: misc/tree.png Graphic file (type png)
 <use misc/tree.png>
 Package pdftex.def Info: misc/tree.png  used on input line 4.
-(pdftex.def)             Requested size: 345.0pt x 341.31972pt.
+(pdftex.def)             Requested size: 345.0pt x 364.35205pt.
 )
-Overfull \hbox (15.18057pt too wide) in paragraph at lines 145--146
+Overfull \hbox (15.18057pt too wide) in paragraph at lines 141--142
 \T1/cmr/m/n/10 quired. For ex-am-ple, the fol-low-ing com-mand will pro-duce SR
 R5487396_R1.fastq.gz
  []
 
 [6] [7 <./misc/tree.png>]
-Overfull \hbox (11.91284pt too wide) in paragraph at lines 155--155
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 151--151
 []\T1/cmtt/m/n/10 qsub -V -S /bin/bash -cwd -j y -pe smp 12 faster-qdump_sequen
 tial.sh[] 
  []
 
 
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 175--175
+Overfull \hbox (6.66412pt too wide) in paragraph at lines 168--168
 []\T1/cmtt/m/n/10 qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 4 parallel_tas
 k.sh \[] 
  []
 
 
-Overfull \hbox (26.95547pt too wide) in paragraph at lines 189--190
+Overfull \hbox (26.95547pt too wide) in paragraph at lines 181--182
 \T1/cmr/m/n/10 ten-sion) on sep-a-rates lines. You are now ready to ex-e-cute t
 he faster-qdump_parallel.sh
  []
@@ -333,172 +333,160 @@ he faster-qdump_parallel.sh
 [8]) [9]
 \openout2 = `Methods.aux'.
 
- (./Methods.tex [10
+ (./Methods.tex
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 62--62
+[]\T1/cmtt/m/n/10 --readFilesIn  ./$input/$input"_1.fastq" ./$input/$input"_2.f
+astq" \[] 
+ []
+
+[10
 
 
 ]
-Overfull \hbox (11.91284pt too wide) in paragraph at lines 66--66
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 90--90
 []\T1/cmtt/m/n/10 --readFilesIn  ./$input/$input"_1.fastq" ./$input/$input"_2.f
 astq" \[] 
  []
 
 
-Overfull \hbox (11.91284pt too wide) in paragraph at lines 97--97
-[]\T1/cmtt/m/n/10 --readFilesIn  ./$input/$input"_1.fastq" ./$input/$input"_2.f
-astq" \[] 
- []
-
-
-Overfull \hbox (11.91284pt too wide) in paragraph at lines 97--97
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 90--90
 []\T1/cmtt/m/n/10 --outTmpDir ../analysis/STAR/output_2nd_pass/_STARtmp_$SGE_TA
 SK_ID \[] 
  []
 
 [11] [12]
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 174--174
+Overfull \hbox (6.66412pt too wide) in paragraph at lines 162--162
 []\T1/cmtt/m/n/10 cut -f 1 -d ',' ../../metadata/metadata.csv | tail -n +2 > RG
 LB.txt[] 
  []
 
 
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 174--174
+Overfull \hbox (6.66412pt too wide) in paragraph at lines 162--162
 []\T1/cmtt/m/n/10 cut -f 5 -d ',' ../../metadata/metadata.csv | tail -n +2 > RG
 PU.txt[] 
  []
 
 [13]
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 225--225
-[]\T1/cmtt/m/n/10 SAMPLES="$HOME/jsb/springer2/RNAseq_GATK_JGW/metadata/samples
-.list"[] 
- []
-
-
-Overfull \hbox (48.65387pt too wide) in paragraph at lines 225--225
-[]\T1/cmtt/m/n/10 BAMPATH="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/STAR/ou
-tput_2nd_pass"[] 
- []
-
-
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 225--225
-[]\T1/cmtt/m/n/10 OUTPUT="$HOME/jsb/springer2/RNAseq_GATK_JGW/analysis/addReadG
-roups"[] 
- []
-
-[14]
-Overfull \hbox (51.8031pt too wide) in paragraph at lines 249--249
+Overfull \hbox (51.8031pt too wide) in paragraph at lines 231--231
 []\T1/cmtt/m/n/9 @RG ID:C5NL3ACXX.1.CAGATC LB:A_CTL24 PL:ILLUMINA SM:SRR5487372
  PU:C5NL3ACXX.1.CAGATC[] 
  []
 
 
-Overfull \hbox (51.8031pt too wide) in paragraph at lines 249--249
+Overfull \hbox (51.8031pt too wide) in paragraph at lines 231--231
 []\T1/cmtt/m/n/9 @RG ID:C5NL3ACXX.1.TGACCA LB:A_MAP24 PL:ILLUMINA SM:SRR5487376
  PU:C5NL3ACXX.1.TGACCA[] 
  []
 
 
-Overfull \hbox (51.8031pt too wide) in paragraph at lines 249--249
+Overfull \hbox (51.8031pt too wide) in paragraph at lines 231--231
 []\T1/cmtt/m/n/9 @RG ID:C5NL3ACXX.3.TGACCA LB:B_CTL24 PL:ILLUMINA SM:SRR5487378
  PU:C5NL3ACXX.3.TGACCA[] 
  []
 
 
-Overfull \hbox (51.8031pt too wide) in paragraph at lines 249--249
+Overfull \hbox (51.8031pt too wide) in paragraph at lines 231--231
 []\T1/cmtt/m/n/9 @RG ID:C5NL3ACXX.3.GTGAAA LB:B_MAP24 PL:ILLUMINA SM:SRR5487382
  PU:C5NL3ACXX.3.GTGAAA[] 
  []
 
-[15]
-Overfull \hbox (53.14255pt too wide) in paragraph at lines 287--288
+[14]
+Overfull \hbox (53.14255pt too wide) in paragraph at lines 266--267
 []\T1/cmr/m/n/10 Here we use the Bovine Genome Database ([][]https://bovinegeno
 me.elsiklab.missouri.edu/[][])
  []
 
-
-Overfull \hbox (47.97702pt too wide) in paragraph at lines 305--306
-\T1/cmr/m/n/10 ones in the STAR genome. If you in-spect the fasta head-ers of t
-he UMD3.1_chromosomes.fa,
- []
-
-[16]
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 352--352
+[15]
+Overfull \hbox (6.66412pt too wide) in paragraph at lines 328--328
 []\T1/cmtt/m/n/10 sed -r s'/^>.+Chromosome\s+(\S+)\s+.+/>\1/' UMD3.1_chromosome
 s.fa \[] 
  []
 
-
-Overfull \hbox (36.1847pt too wide) in paragraph at lines 356--357
+[16]
+Overfull \hbox (36.1847pt too wide) in paragraph at lines 332--333
 \T1/cmr/m/n/10 file end-ing in .dict and an in-dex file end-ing in .fai.([][]ht
 tps://gatk.broadinstitute.org/hc/en-
  []
 
-[17] [18] [19] [20]
-Overfull \hbox (53.87262pt too wide) in paragraph at lines 519--520
+[17]
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 403--403
+[]\T1/cmtt/m/n/10 OUTPUT="$HOME/jsb/RNAseq_GATK_JGW/analysis/BaseQualityRecalib
+ration"[] 
+ []
+
+[18]
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 430--430
+[]\T1/cmtt/m/n/10 OUTPUT="$HOME/jsb/RNAseq_GATK_JGW/analysis/BaseQualityRecalib
+ration"[] 
+ []
+
+[19]
+Overfull \hbox (17.16156pt too wide) in paragraph at lines 469--469
+[]\T1/cmtt/m/n/10 BAMPATH="$HOME/jsb/RNAseq_GATK_JGW/analysis/BaseQualityRecali
+bration"[] 
+ []
+
+
+Overfull \hbox (53.87262pt too wide) in paragraph at lines 475--476
 \T1/cmr/m/n/10 and com-put-ing val-ues stored in the VCF INFO fields ([][]https
 ://gatk.broadinstitute.org/hc/en-
  []
 
-[21]
-Overfull \hbox (64.7055pt too wide) in paragraph at lines 551--552
+[20]
+Overfull \hbox (64.7055pt too wide) in paragraph at lines 502--503
 \T1/cmr/m/n/10 Geno-type-GVCFs com-mand ( [][]https://gatk.broadinstitute.org/h
 c/en-us/articles/360037057852-
  []
 
-[22]
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 629--629
-[]\T1/cmtt/m/n/10 bcftools filter -i 'FS > 60' filtered_2.vcf.gz | bcftools vie
-w -H \[] 
- []
-
-
-Overfull \hbox (11.91284pt too wide) in paragraph at lines 637--637
-[]\T1/cmtt/m/n/10 bcftools filter -i 'QD < 2.0' filtered_2.vcf.gz | bcftools vi
-ew -H \[] 
- []
-
-[23]
-Overfull \hbox (11.91284pt too wide) in paragraph at lines 660--660
-[]\T1/cmtt/m/n/10 bcftools filter -e "QUAL < 20.0 && INFO/DP < 10" filtered_2.v
-cf.gz \[] 
- []
-
-
-Overfull \hbox (1.35986pt too wide) in paragraph at lines 662--663
-\T1/cmr/m/n/10 found at [][]https://gatk.broadinstitute.org/hc/en-us/articles/3
-60035890471-Hard-
- []
-
-[24]
-Overfull \hbox (6.66412pt too wide) in paragraph at lines 709--709
+[21]
+Overfull \hbox (6.66412pt too wide) in paragraph at lines 564--564
 []\T1/cmtt/m/n/10 bcftools view -H -r 11:21401262-21402262 -s SRR5487372,SRR548
 7376,\[] 
  []
 
 
-Overfull \hbox (53.90259pt too wide) in paragraph at lines 720--720
-[]\T1/cmtt/m/n/10 bcftools query -r 11:21401262-21402262 -s SRR5487372,SRR54873
-76,SRR5487378 \[] 
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 579--579
+[]\T1/cmtt/m/n/10 SRR5487378 -f 'chr%CHROM pos:%POS Q:%QUAL DP=%INFO/DP GT=[ %G
+T]\n' \[] 
+ []
+
+[22] [23]
+Overfull \hbox (6.66412pt too wide) in paragraph at lines 631--631
+[]\T1/cmtt/m/n/10 bcftools filter -i 'FS > 60' filtered_2.vcf.gz | bcftools vie
+w -H \[] 
  []
 
 
-Overfull \hbox (17.16156pt too wide) in paragraph at lines 720--720
-[]\T1/cmtt/m/n/10 -f 'chr%CHROM pos:%POS Q:%QUAL DP=%INFO/DP GT=[ %GT]\n' outpu
-t.vcf.gz[] 
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 639--639
+[]\T1/cmtt/m/n/10 bcftools filter -i 'QD < 2.0' filtered_2.vcf.gz | bcftools vi
+ew -H \[] 
  []
 
 
-Overfull \hbox (10.37155pt too wide) in paragraph at lines 741--742
+Overfull \hbox (11.91284pt too wide) in paragraph at lines 662--662
+[]\T1/cmtt/m/n/10 bcftools filter -e "QUAL < 20.0 || INFO/DP < 10" filtered_3.v
+cf.gz \[] 
+ []
+
+
+Overfull \hbox (1.35986pt too wide) in paragraph at lines 664--665
+\T1/cmr/m/n/10 found at [][]https://gatk.broadinstitute.org/hc/en-us/articles/3
+60035890471-Hard-
+ []
+
+
+Overfull \hbox (10.37155pt too wide) in paragraph at lines 672--673
 \T1/cmr/m/n/10 the In-te-grated Genome viewer ([][]https://software.broadinstit
 ute.org/software/igv/[][])
  []
 
-[25] (./figures/fig3.tex
-<misc/chr11_region.png, id=328, 1120.185pt x 625.33624pt>
+[24] (./figures/fig3.tex
+<misc/chr11_region.png, id=327, 1120.185pt x 625.33624pt>
 File: misc/chr11_region.png Graphic file (type png)
 <use misc/chr11_region.png>
 Package pdftex.def Info: misc/chr11_region.png  used on input line 4.
 (pdftex.def)             Requested size: 345.0pt x 192.5927pt.
-)) [26] [27 <./misc/chr11_region.png>] (./ms.bbl
+)) [25] [26 <./misc/chr11_region.png>] (./ms.bbl
 LaTeX Font Info:    External font `cmex10' loaded for size
 (Font)              <7> on input line 14.
 LaTeX Font Info:    External font `cmex10' loaded for size
@@ -545,35 +533,35 @@ Overfull \hbox (34.49298pt too wide) in paragraph at lines 57--62
 ine-[]short-[]variants$[][]\T1/cmr/m/n/10 . 
  []
 
-[28
+[27
 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 99--103
+Underfull \hbox (badness 10000) in paragraph at lines 104--108
 []\T1/cmr/m/n/10 GATK.  Base qual-ity score re-cal-i-bra-tion, 2021.  URL
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 99--103
+Underfull \hbox (badness 10000) in paragraph at lines 104--108
 [][]$\T1/cmtt/m/n/10 https : / / gatk . broadinstitute . org / hc / en-[]us / a
 rticles /
  []
 
 )
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 51.
- [29]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 51.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 42.
+ [28]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 42.
  (./ms.aux (./Materials.aux) (./Methods.aux))
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 51.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 51.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 42.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 42.
 Package rerunfilecheck Info: File `ms.out' has not changed.
-(rerunfilecheck)             Checksum: 870047FA27F03503627EA10B007F2D3D;2919.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 51.
+(rerunfilecheck)             Checksum: 76A6E6DB97F6422089B092828A7E97EE;2940.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 42.
  ) 
 Here is how much of TeX's memory you used:
- 6012 strings out of 483183
- 90787 string characters out of 5966292
- 347106 words of memory out of 5000000
- 20818 multiletter control sequences out of 15000+600000
+ 6015 strings out of 483183
+ 90849 string characters out of 5966292
+ 346133 words of memory out of 5000000
+ 20821 multiletter control sequences out of 15000+600000
  543317 words of font info for 45 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
  34i,6n,32p,1018b,450s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -589,7 +577,7 @@ onts/pk/ljfour/jknappen/ec/ecrm0900.600pk> </home/brouardjs/.texlive2019/texmf-
 var/fonts/pk/ljfour/jknappen/ec/ecbx0900.600pk> </home/brouardjs/.texlive2019/t
 exmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/brouardjs/.texlive2
 019/texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk>
-Output written on ms.pdf (29 pages, 518638 bytes).
+Output written on ms.pdf (28 pages, 531512 bytes).
 PDF statistics:
  904 PDF objects out of 1000 (max. 8388607)
  380 compressed objects within 4 object streams

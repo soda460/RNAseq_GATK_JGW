@@ -1,2 +1,0 @@
-UMD3.1_chromosomes.fa<BR ALIGN="LEFT"/>
-UMD3.1_chromosomes_e.fa<BR ALIGN="LEFT"/>>

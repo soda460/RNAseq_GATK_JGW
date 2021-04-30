@@ -245,4 +245,11 @@
   revised         = {2021-01-09},
 }
 
+@Book{DataSkills,
+  author = {Vince Buffalo},
+  editor = {O'Reilly},
+  title  = {Bioinformatics Data Skills},
+  year   = {2015},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
