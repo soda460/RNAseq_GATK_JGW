@@ -21,7 +21,7 @@ digraph G {
         node [style=filled];
         node8 [label="Analysis-Ready RNAseq Reads"]
 		node9 [label="HaplotypeCaller\n(GVCF mode)"]
-		node10 [label="DBI import of GVCF files \n(GVCF mode)"]
+		node10 [label="DBI import of GVCF files \n"]
 		node11 [label="GenotypeGVCF"]
 		node12 [label="Variant filtering\n(RNAseq-specific settings)"]
 		node13 [label="Filtered variants"]

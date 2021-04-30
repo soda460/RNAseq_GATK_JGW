@@ -29,8 +29,8 @@
 \BOOKMARK [3][-]{subsubsection.3.6.1}{Calling Variants Per-sample \(GVCF mode\)}{subsection.3.6}% 29
 \BOOKMARK [3][-]{subsubsection.3.6.2}{Merging of GCVF files}{subsection.3.6}% 30
 \BOOKMARK [3][-]{subsubsection.3.6.3}{Joint Genotyping}{subsection.3.6}% 31
-\BOOKMARK [2][-]{subsection.3.7}{Querying VCF files}{section.3}% 32
-\BOOKMARK [2][-]{subsection.3.8}{Filtering variants}{section.3}% 33
+\BOOKMARK [2][-]{subsection.3.7}{Filtering variants}{section.3}% 32
+\BOOKMARK [2][-]{subsection.3.8}{Querying VCF files}{section.3}% 33
 \BOOKMARK [2][-]{subsection.3.9}{Examining and Visualizing Alignment files}{section.3}% 34
 \BOOKMARK [3][-]{subsubsection.3.9.1}{Tweaking the GFF3 file}{subsection.3.9}% 35
 \BOOKMARK [3][-]{subsubsection.3.9.2}{Inspecting reads from sample SRR5487372}{subsection.3.9}% 36

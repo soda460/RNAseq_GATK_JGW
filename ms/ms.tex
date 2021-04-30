@@ -14,7 +14,9 @@
 \maketitle
 
 \begin{abstract}
-Put the abstract here.
+	
+The Genome Analysis Toolkit (GATK) developped at the Broad Institute provides state-of-the-art pipelines for germline and somatic variant discovery and genotyping. Unfortunately, the fully validated GATK pipeline for calling variant on RNAseq data is a Per-sample workflow that did not include the recent improvements seen in modern workflows, notably the possibility to perform joint genotyping analysis. Here we describe how modern GATK commands from distinct workflows can be combined to call variants on RNAseq samples. We provide a detailed tutorial which starts with raw RNAseq reads and ends with filtered variants, of which some were shown to be associated with bovine paratuberculosis.
+
 \end{abstract}
 
 \section{Introduction}
@@ -27,11 +29,10 @@ An appealing alternative would be to use guidelines from the GATK Best practices
 
 In spite that the protocol described here largely use workflows and concepts developped by the GATK team, it should be pointed out that calling variants on RNAseq data with the joint genotyping workflow has still not been validated by GATK experts. We have shown previously that this approach yield similar if not better results when compared to a Per-sample method \cite{Brouard2019}, but one would be advised to carefully and critically examine the results to detect potential artifacts. Here we present a fully updated version of this approach in the form of an end-to-end analysis of RNAseq samples extracted from 50 dairy cows in the context of studying the mechanism of resistance to bovine paratuberculosis.
 
-
-As shown in figure 1, the workflow presented here involve several steps. In the data cleanup part, the raw RNAseq reads are prepared for RNAseq analysis according to the GATK Best practices relative to RNAseq data. In the variant discovery part, the analyis-ready RNAseq reads follow the germline Joint genotyping workflow up to the variant filtering steps.  
-
- 
 \input{figures/fig1}
+
+As shown in figure 1, the workflow presented here involve several steps. In the data cleanup part, the raw RNAseq reads are prepared for RNAseq analysis according to the GATK Best practices relative to RNAseq data. In the variant discovery part, all steps belong to the germline joint genotyping workflow up to the variant filtering steps.  
+
 
 
 In the next section, we describe how the diverse programs required to perform the whole analysis can be installed.

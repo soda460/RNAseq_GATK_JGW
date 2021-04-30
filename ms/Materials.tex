@@ -116,7 +116,7 @@ A good starting point would be to download the following GitHub repository:
 git clone https://github.com/soda460/RNAseq_GATK_JGW.git
 \end{verbatim}
 
-It contains all scripts described in the next section as well as several text files that allow one to reproduce the analysis presented here. Moreover it contains a structure of files and folders consistent with almost all file paths given in the scripts. As a reference, figure 2 displays the relative organization of the scripts, files and folders refered by, or created by the listings described in this tutorial. Albeit somes files and subfolders were omited, it gives a good overview of the entire workflow.
+It contains all scripts described in the next sections as well as several text files that allow one to reproduce the analysis presented here. Consistent with the GitHub repository, figure 2 displays the relative organization of the scripts, files and folders refered by, or created by the listings described in this tutorial. Albeit somes files and subfolders were omited, it gives a good overview of the entire workflow.
 
 
 \input{figures/fig2}
@@ -180,19 +180,14 @@ qsub -V -S /bin/bash -cwd -j y -pe smp 12 unparallel_task.sh \
 \end{verbatim}
 
 
-Before lauching the parallel version of fasterq.dump.sh, create a simple list file of the 24 SRR* folders present in the /data folder:
+Before lauching the parallel version of fasterq.dump.sh, create a simple list of the 24 SRR* folders present in the /data folder:
 
 \begin{verbatim}
 ls -d1 SRR5487???>SRR.list
 \end{verbatim}
 
-The SRR.list file should contain the 24 SRR identifiers (without the .sra extension) on separates lines.
+The SRR.list file should contain the 24 SRR identifiers (without the .sra extension) on separates lines. You are now ready to execute the faster-qdump\_parallel.sh listing:
 
-\begin{verbatim}
-qsub -V -S /bin/bash -cwd -j y -t 1-24 -pe smp 4 faster-qdump_parallel.sh
-\end{verbatim}
-
-where \noindent faster-qdump\_parallel.sh reads as follow:
 \begin{verbatim}
 #!/bin/bash
 #$ -N fasterq-dump
