@@ -1,0 +1,165 @@
+\section{Notes}
+
+\begin{enumerate}
+	%Note 1%
+	\item This step ensure that relevant information about the sequencing process follow each read in downstream processing. In addition, when this step is done appropriately, it allow to mitigate the consequences of artifacts associated with sequencing features in the duplicate marking and base recalibration steps. For example, when samples are multiplexed, it is important to known which reads origin from which library, which were sequenced on which flowcell, etc. To learn more about the Read groups as understand by the GATK team and to learn how to derive this information from read names, one should consult this page: \href{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}{https://gatk.broadinstitute.org/hc/en-us/articles/360035890671-Read-groups}.
+	
+	%Note 2%
+	\item When present, read groups are written in the header of BAM files. Thus, this simple UNIX trick allows one to quickly inspect the read groups associated to a BAM file:
+	
+	\begin{verbatim}
+		samtools view -H sample.bam | grep '@RG'	
+	\end{verbatim}
+	
+	To see read groups on all our BAM files, use something like:
+	
+	\begin{verbatim}
+		for i in `ls *.bam | xargs basename -s '.bam'`;\
+		do samtools view -H $i.bam | grep '@RG'; done
+	\end{verbatim}
+	
+	\begin{small}
+		\begin{verbatim}
+			@RG	ID:C5NL3ACXX.1.CAGATC	LB:A_CTL24	PL:ILLUMINA	SM:SRR5487372	PU:C5NL3ACXX.1.CAGATC
+			@RG	ID:C5NL3ACXX.1.TGACCA	LB:A_MAP24	PL:ILLUMINA	SM:SRR5487376	PU:C5NL3ACXX.1.TGACCA
+			@RG	ID:C5NL3ACXX.3.TGACCA	LB:B_CTL24	PL:ILLUMINA	SM:SRR5487378	PU:C5NL3ACXX.3.TGACCA
+			@RG	ID:C5NL3ACXX.3.GTGAAA	LB:B_MAP24	PL:ILLUMINA	SM:SRR5487382	PU:C5NL3ACXX.3.GTGAAA
+		\end{verbatim}
+	\end{small}
+	
+	%Note 3%
+	\item  If you inspect the FASTA headers of the UMD3.1\_chromosomes.fa, you will notice that each entry contains many fields (e.g. gnl , UMD3.1 Accession numbers):
+	
+	\begin{verbatim}
+		grep ">" UMD3.1_chromosomes.fa
+		output:
+		>gnl|UMD3.1|GK000010.2 Chromosome 10 AC_000167.1
+		>gnl|UMD3.1|GK000011.2 Chromosome 11 AC_000168.1
+		>gnl|UMD3.1|GK000012.2 Chromosome 12 AC_000169.1
+		...
+		>gnl|UMD3.1|GK000009.2 Chromosome 9 AC_000166.1
+		>gnl|UMD3.1|AY526085.1 Chromosome MT NC_006853.1
+		>gnl|UMD3.1|GK000030.2 Chromosome X AC_000187.1
+		>gnl|UMD3.1|GJ057137.1 GPS_000341577.1 NW_003097882.1
+		>gnl|UMD3.1|GJ057138.1 GPS_000341578.1 NW_003097883.1
+		...
+	\end{verbatim}
+	
+	In contrast, the chromosomes entries in the STAR genome are quite different:
+	
+	\begin{verbatim}
+		cat Bos_taurus.UMD3.1.87_index/chrName.txt | head -n 32
+		output:
+		1
+		10
+		11
+		...
+		9
+		MT
+		X
+		GJ058422.1
+	\end{verbatim}
+	
+	Therefore, the chromosome identifiers found in the \textit{Bos taurus} UMD3.1 genome need to be changed to match their counterparts in the STAR genome. This could be achieved with UNIX SED:
+	
+	\begin{verbatim}
+		sed -r s'/^>.+Chromosome\s+(\S+)\s+.+/>\1/' UMD3.1_chromosomes.fa \
+		> temp1.fa
+		grep ">" temp1.fa | head -n 40
+		
+		# Handle unassigned scaffolds (accessions that begin with "GJ").
+		sed -r s'/^>gnl\|UMD3\.1\|(\S+)+\s+.+/>\1/' temp1.fa > temp2.fa
+		grep ">" temp2.fa | tail -n +30 | head -n 10
+		mv temp2.fa refGenome.fasta
+		rm temp1.fa
+	\end{verbatim}
+	
+	
+	%Note 4%
+	\item 	
+	The following commands were used to prepare two tab-separated files containing annotation values from six important annotations fields: QD,  FS, SOR, MQ, MQRankSum and ReadPosRankSum:
+	
+	\begin{verbatim}
+		bcftools query snps.vcf.gz -f '%FS\t%SOR\t%MQRankSum\t \
+		%ReadPosRankSum\t%QD\t%MQ\n' > snps.metrics.txt
+		bcftools query indels.vcf.gz -f '%FS\t%SOR\t%MQRankSum\t \
+		%ReadPosRankSum\t%QD\t%MQ\n' > indels.metrics.txt
+		echo -e "FS\tSOR\tMQRankSum\tReadPosRankSum\tQD\tMQ" > header
+		cat header indels.metrics.txt > indels.metrics.tsv
+		cat header snps.metrics.txt > snps.metrics.tsv
+	\end{verbatim}
+	
+	
+	
+	We then process these tables with R (data\_wrangling.R) to produce the density plots presented in figure 2. The QualByDepth (QD) annotation is an indicator of the variant quality independent of the coverage depth at the site. It provides a better estimate than using directly the primary QUAL or QD fields. Both the FisherStrand (FS) and the StrandOddsRatio (SOR) annotations estimate, with distinct statistical tests, the probability that a strand bias exists at a site. For example, when there is no strand bias, the frequencies of alternate alleles that reside on the forward and reverse strands should be similar and the FS should be close to 0. The RMSMappingQuality (MQ) is a superior indicator (the square root of the average of the squares) than  the average mapping quality because it include the variation in the dataset. Finally, the MappingQualityRankSumTest (MQRankSum) allows to compare the mapping qualities of the reads that support the reference allele relative to those that support the alternate alleles. For a in-depth description of these annotations, consult the GATK site (\href{https://gatk.broadinstitute.org/hc/en-us/articles/360035890471-Hard-filtering-germline-short-variants}{https://gatk.broadinstitute.org/hc/en-us/articles/360035890471-Hard-filtering-germline-short-variants}).
+	
+	
+	
+	%Note 5%
+	\item Chromosome names in this file differ from those present in the STAR genome and consequently from those present in our alignment files. With the command below, one can see the identifiers present in the GFF3 file as well as the number of features associated with them :
+	
+	\begin{verbatim}
+		cat Ensembl79_UMD3.1_genes.gff3 | cut -f 1 | uniq -cd
+	\end{verbatim}
+	
+	
+	\noindent output:
+	\begin{verbatim}
+		21287 GK000001.2
+		18819 GK000030.2
+		26235 GK000002.2
+		29793 GK000003.2
+		...
+		3 GJ060027.1
+		3 GJ058256.1
+	\end{verbatim}
+	
+	We therefore need to replace the pattern used for the chromosome IDs (GK + 0000 + chromosome number) by solely the chromosome number. This could be done easily with sed:
+	
+	\begin{verbatim}
+		sed -r s'/^GK[0]+([0-9]+).2/\1/'g Ensembl79_UMD3.1_genes.gff3 \
+		> Ensembl79_UMD3.1_genes_e.gff3
+	\end{verbatim}
+	
+	As always, the edited file should be inspected to ensure that the desired changes have been done properly.
+	
+	
+	%Note 6%
+	\item Since BCFtools work well with compressed files it would be a waste of time to compress or extract VCF files not to mention the risk of corrupting or erasing a VCF file. In addition, because one can easily erase a file by mistake when attempting to redirect the result of a command, it is a good practice to keep a copy of the primary VCF output file in a safe place.
+	
+	
+	% Note 7%
+	\item For example, we could be interested to know how many variants will be excluded by hard-filtering with FS > 60.0 and 'QD < 2.0'.
+	
+	We begin by counting how many variants will be excluded with FS > 60.0:
+	
+	
+	\begin{verbatim}
+		bcftools filter -i 'FS > 60.0' filtered_2.vcf.gz | bcftools view -H \
+		| wc -l
+		2610
+	\end{verbatim}
+	
+	and how many variants will be excluded with QD < 2.0:
+	
+	\begin{verbatim}
+		bcftools filter -i 'QD < 2.0' filtered_2.vcf.gz | bcftools view -H \
+		| wc -l
+		15089
+	\end{verbatim}
+	
+	
+	To correctly translate the previous recommendation and combine the two criterions, one would be advised to use the logical '||' operator (OR) (rather than '\&\&' (AND)) because one will want to throw out any variants with 'FS > 60' or 'QD < 2.0'. Therefore, to know how many variants will be excluded use: 
+	
+	\begin{verbatim}
+		bcftools filter -i 'FS > 60 || QD < 2.0' filtered_2.vcf.gz \
+		| bcftools view -H | wc -l
+		17273
+	\end{verbatim}
+	
+	Note that the boolean expressions '\&\&' vs '\&' and '||' vs '|' may have different meanings when used with the BCFtools (\href{https://samtools.github.io/bcftools/howtos/filtering.html}{https://samtools.github.io/bcftools/howtos/filtering.html}).
+
+
+
+
+	
